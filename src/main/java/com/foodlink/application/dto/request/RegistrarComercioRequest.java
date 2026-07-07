@@ -9,6 +9,7 @@ public record RegistrarComercioRequest(
         String ciudad,
         String callePrincipal,
         String calleSecundaria,
-        String referencia
+        String referencia,
+        String password
 ) {
 }
