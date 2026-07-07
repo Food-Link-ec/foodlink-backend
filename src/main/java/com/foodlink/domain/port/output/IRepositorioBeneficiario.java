@@ -9,6 +9,8 @@ public interface IRepositorioBeneficiario {
 
     Beneficiario guardar(Beneficiario beneficiario);
 
+    Beneficiario guardar(Beneficiario beneficiario, String passwordHash);
+
     Optional<Beneficiario> buscarPorId(UUID id);
 
     Optional<Beneficiario> buscarPorRuc(String ruc);
