@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,18 +30,23 @@ class RegistrarBeneficiarioUseCaseTest {
     @Mock
     private ApplicationEventPublisher publicadorEventos;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private RegistrarBeneficiarioUseCaseImpl useCase;
 
     private RegistrarBeneficiarioRequest requestValido() {
         return new RegistrarBeneficiarioRequest("Fundación Manos Unidas", RUC_VALIDO, "contacto@manosunidas.org",
-                "0991234567", "Pichincha", "Quito", "Av. 6 de Diciembre N32-100", "Av. Patria", "Junto al parque");
+                "0991234567", "Pichincha", "Quito", "Av. 6 de Diciembre N32-100", "Av. Patria", "Junto al parque",
+                "SuperClave123");
     }
 
     @Test
     void deberiaRegistrarBeneficiarioYRetornarResponseConDatosCorrectos() {
         when(repositorioBeneficiario.existePorRuc(RUC_VALIDO)).thenReturn(false);
-        when(repositorioBeneficiario.guardar(any())).thenAnswer(invocacion -> invocacion.getArgument(0));
+        when(passwordEncoder.encode(any())).thenReturn("hash");
+        when(repositorioBeneficiario.guardar(any(), any())).thenAnswer(invocacion -> invocacion.getArgument(0));
 
         BeneficiarioResponse response = useCase.registrar(requestValido());
 
@@ -56,6 +62,6 @@ class RegistrarBeneficiarioUseCaseTest {
 
         assertThrows(IllegalArgumentException.class, () -> useCase.registrar(requestValido()));
 
-        verify(repositorioBeneficiario, never()).guardar(any());
+        verify(repositorioBeneficiario, never()).guardar(any(), any());
     }
 }
