@@ -7,6 +7,7 @@ import com.foodlink.domain.model.comprador.Comprador;
 import com.foodlink.domain.port.input.RegistrarCompradorUseCase;
 import com.foodlink.domain.port.output.IRepositorioComprador;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,13 @@ public class RegistrarCompradorUseCaseImpl implements RegistrarCompradorUseCase 
 
     private final IRepositorioComprador repositorioComprador;
     private final ApplicationEventPublisher publicadorEventos;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegistrarCompradorUseCaseImpl(IRepositorioComprador repositorioComprador, ApplicationEventPublisher publicadorEventos) {
+    public RegistrarCompradorUseCaseImpl(IRepositorioComprador repositorioComprador, ApplicationEventPublisher publicadorEventos,
+                                          PasswordEncoder passwordEncoder) {
         this.repositorioComprador = repositorioComprador;
         this.publicadorEventos = publicadorEventos;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,7 +34,8 @@ public class RegistrarCompradorUseCaseImpl implements RegistrarCompradorUseCase 
 
         Comprador comprador = Comprador.registrar(request.cedula(), request.nombre(), request.apellido(), request.email(), request.telefono());
 
-        Comprador compradorGuardado = repositorioComprador.guardar(comprador);
+        String passwordHash = passwordEncoder.encode(request.password());
+        Comprador compradorGuardado = repositorioComprador.guardar(comprador, passwordHash);
 
         publicadorEventos.publishEvent(new CompradorRegistrado(
                 compradorGuardado.getId(),
