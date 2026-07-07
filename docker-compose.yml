@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -34,3 +35,33 @@ services:
 volumes:
   foodlink_postgres_data:
   foodlink_redis_data:
+=======
+services:
+  postgres-foodlink:
+    image: postgres:16-alpine
+    container_name: foodlink_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-foodlink_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin-foodlink:
+    image: dpage/pgadmin4
+    container_name: foodlink_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@foodlink.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - postgres-foodlink
+
+volumes:
+  postgres_data:
+>>>>>>> baf3571641915e5960bf5753a998c32749f24234
