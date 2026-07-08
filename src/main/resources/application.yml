@@ -1,0 +1,102 @@
+spring:
+  application:
+    name: foodlink-backend
+  profiles:
+    active: production
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:foodlink}
+    username: ${DB_USER:foodlink}
+    password: ${DB_PASSWORD:foodlink123}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:placeholder}
+
+jwt:
+  secret: ${JWT_SECRET:clave-local-desarrollo-minimo-256-bits-aqui}
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+
+logging:
+  level:
+    com.foodlink.domain: DEBUG
+    com.foodlink.application: DEBUG
+    com.foodlink.infrastructure: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    url: jdbc:postgresql://${SUPABASE_DB_HOST}:${SUPABASE_DB_PORT}/${SUPABASE_DB_NAME}?sslmode=require
+    username: ${SUPABASE_DB_USER}
+    password: ${SUPABASE_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    show-sql: false
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    com.foodlink.domain: INFO
+    com.foodlink.application: INFO
+    com.foodlink.infrastructure: WARN

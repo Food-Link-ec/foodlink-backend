@@ -11,6 +11,8 @@ public interface IRepositorioComercio {
 
     Comercio guardar(Comercio comercio);
 
+    Comercio guardar(Comercio comercio, String passwordHash);
+
     Optional<Comercio> buscarPorId(UUID id);
 
     Optional<Comercio> buscarPorRuc(String ruc);

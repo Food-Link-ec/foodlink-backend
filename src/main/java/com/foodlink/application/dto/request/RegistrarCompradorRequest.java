@@ -5,6 +5,7 @@ public record RegistrarCompradorRequest(
         String nombre,
         String apellido,
         String email,
-        String telefono
+        String telefono,
+        String password
 ) {
 }

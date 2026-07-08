@@ -8,6 +8,7 @@ import com.foodlink.domain.model.shared.Direccion;
 import com.foodlink.domain.port.input.RegistrarBeneficiarioUseCase;
 import com.foodlink.domain.port.output.IRepositorioBeneficiario;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,13 @@ public class RegistrarBeneficiarioUseCaseImpl implements RegistrarBeneficiarioUs
 
     private final IRepositorioBeneficiario repositorioBeneficiario;
     private final ApplicationEventPublisher publicadorEventos;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegistrarBeneficiarioUseCaseImpl(IRepositorioBeneficiario repositorioBeneficiario, ApplicationEventPublisher publicadorEventos) {
+    public RegistrarBeneficiarioUseCaseImpl(IRepositorioBeneficiario repositorioBeneficiario, ApplicationEventPublisher publicadorEventos,
+                                             PasswordEncoder passwordEncoder) {
         this.repositorioBeneficiario = repositorioBeneficiario;
         this.publicadorEventos = publicadorEventos;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -40,7 +44,8 @@ public class RegistrarBeneficiarioUseCaseImpl implements RegistrarBeneficiarioUs
 
         Beneficiario beneficiario = Beneficiario.registrar(request.nombre(), request.ruc(), request.email(), request.telefono(), direccion);
 
-        Beneficiario beneficiarioGuardado = repositorioBeneficiario.guardar(beneficiario);
+        String passwordHash = passwordEncoder.encode(request.password());
+        Beneficiario beneficiarioGuardado = repositorioBeneficiario.guardar(beneficiario, passwordHash);
 
         publicadorEventos.publishEvent(new BeneficiarioRegistrado(
                 beneficiarioGuardado.getId(),
