@@ -21,12 +21,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ComercioInvalidoException.class)
     public ResponseEntity<ApiErrorResponse> manejarComercioInvalido(ComercioInvalidoException ex) {
-        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        ex.printStackTrace(); // <-- Imprime el rastro real en la consola de IntelliJ
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, "Dominio Comercio: " + ex.getMessage());
     }
 
     @ExceptionHandler(RucInvalidoException.class)
     public ResponseEntity<ApiErrorResponse> manejarRucInvalido(RucInvalidoException ex) {
-        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        ex.printStackTrace(); // <-- Imprime el rastro real en la consola de IntelliJ
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, "Dominio RUC: " + ex.getMessage());
     }
 
     @ExceptionHandler(BeneficiarioInvalidoException.class)
