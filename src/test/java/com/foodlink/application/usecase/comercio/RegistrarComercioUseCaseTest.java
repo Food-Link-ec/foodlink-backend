@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,18 +30,23 @@ class RegistrarComercioUseCaseTest {
     @Mock
     private ApplicationEventPublisher publicadorEventos;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private RegistrarComercioUseCaseImpl useCase;
 
     private RegistrarComercioRequest requestValido() {
         return new RegistrarComercioRequest(RUC_VALIDO, "Supermercado El Ahorro", "0991234567",
-                "contacto@elahorro.com", "Pichincha", "Quito", "Av. Amazonas N34-451", "Av. Naciones Unidas", "Cerca del parque");
+                "contacto@elahorro.com", "Pichincha", "Quito", "Av. Amazonas N34-451", "Av. Naciones Unidas",
+                "Cerca del parque", "SuperClave123");
     }
 
     @Test
     void deberiaRegistrarComercioYRetornarResponseConDatosCorrectos() {
         when(repositorioComercio.existePorRuc(RUC_VALIDO)).thenReturn(false);
-        when(repositorioComercio.guardar(any())).thenAnswer(invocacion -> invocacion.getArgument(0));
+        when(passwordEncoder.encode(any())).thenReturn("hash");
+        when(repositorioComercio.guardar(any(), any())).thenAnswer(invocacion -> invocacion.getArgument(0));
 
         ComercioResponse response = useCase.registrar(requestValido());
 
@@ -56,6 +62,6 @@ class RegistrarComercioUseCaseTest {
 
         assertThrows(IllegalArgumentException.class, () -> useCase.registrar(requestValido()));
 
-        verify(repositorioComercio, never()).guardar(any());
+        verify(repositorioComercio, never()).guardar(any(), any());
     }
 }

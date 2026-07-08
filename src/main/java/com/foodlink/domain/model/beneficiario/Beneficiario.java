@@ -60,6 +60,11 @@ public class Beneficiario {
         );
     }
 
+    public static Beneficiario reconstituir(UUID id, String nombre, String ruc, String email, String telefono,
+                                             Direccion direccion, EstadoVerificacion estadoVerificacion, LocalDateTime fechaRegistro) {
+        return new Beneficiario(id, nombre, ruc, email, telefono, direccion, estadoVerificacion, fechaRegistro);
+    }
+
     public void verificar() {
         if (estadoVerificacion != EstadoVerificacion.PENDIENTE) {
             throw new BeneficiarioInvalidoException("Solo un beneficiario pendiente puede ser verificado");

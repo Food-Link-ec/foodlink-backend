@@ -58,6 +58,11 @@ public class Comercio {
         );
     }
 
+    public static Comercio reconstituir(UUID id, String ruc, String nombre, String telefono, String email,
+                                         Direccion direccion, EstadoComercio estado, LocalDateTime fechaRegistro) {
+        return new Comercio(id, ruc, nombre, telefono, email, direccion, estado, fechaRegistro);
+    }
+
     private static boolean validarRuc(String ruc) {
         if (ruc == null || !PATRON_RUC.matcher(ruc).matches()) {
             return false;

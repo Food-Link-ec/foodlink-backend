@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,17 +31,22 @@ class RegistrarCompradorUseCaseTest {
     @Mock
     private ApplicationEventPublisher publicadorEventos;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private RegistrarCompradorUseCaseImpl useCase;
 
     private RegistrarCompradorRequest requestValido() {
-        return new RegistrarCompradorRequest(CEDULA_VALIDA, "Juan", "Pérez", "juan.perez@mail.com", "0991234567");
+        return new RegistrarCompradorRequest(CEDULA_VALIDA, "Juan", "Pérez", "juan.perez@mail.com", "0991234567",
+                "SuperClave123");
     }
 
     @Test
     void deberiaRegistrarCompradorYRetornarResponseConDatosCorrectos() {
         when(repositorioComprador.existePorCedula(CEDULA_VALIDA)).thenReturn(false);
-        when(repositorioComprador.guardar(any())).thenAnswer(invocacion -> invocacion.getArgument(0));
+        when(passwordEncoder.encode(any())).thenReturn("hash");
+        when(repositorioComprador.guardar(any(), any())).thenAnswer(invocacion -> invocacion.getArgument(0));
 
         CompradorResponse response = useCase.registrar(requestValido());
 
@@ -56,6 +62,6 @@ class RegistrarCompradorUseCaseTest {
 
         assertThrows(IllegalArgumentException.class, () -> useCase.registrar(requestValido()));
 
-        verify(repositorioComprador, never()).guardar(any());
+        verify(repositorioComprador, never()).guardar(any(), any());
     }
 }

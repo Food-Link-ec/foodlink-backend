@@ -60,6 +60,11 @@ public class Comprador {
         );
     }
 
+    public static Comprador reconstituir(UUID id, String cedula, String nombre, String apellido, String email,
+                                          String telefono, LocalDateTime fechaRegistro, boolean activo) {
+        return new Comprador(id, cedula, nombre, apellido, email, telefono, fechaRegistro, activo);
+    }
+
     private static boolean validarCedula(String cedula) {
         if (!PATRON_CEDULA.matcher(cedula).matches()) {
             return false;

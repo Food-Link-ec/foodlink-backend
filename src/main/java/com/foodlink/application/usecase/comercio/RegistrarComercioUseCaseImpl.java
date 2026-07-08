@@ -8,6 +8,7 @@ import com.foodlink.domain.model.shared.Direccion;
 import com.foodlink.domain.port.input.RegistrarComercioUseCase;
 import com.foodlink.domain.port.output.IRepositorioComercio;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,13 @@ public class RegistrarComercioUseCaseImpl implements RegistrarComercioUseCase {
 
     private final IRepositorioComercio repositorioComercio;
     private final ApplicationEventPublisher publicadorEventos;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegistrarComercioUseCaseImpl(IRepositorioComercio repositorioComercio, ApplicationEventPublisher publicadorEventos) {
+    public RegistrarComercioUseCaseImpl(IRepositorioComercio repositorioComercio, ApplicationEventPublisher publicadorEventos,
+                                         PasswordEncoder passwordEncoder) {
         this.repositorioComercio = repositorioComercio;
         this.publicadorEventos = publicadorEventos;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -40,7 +44,8 @@ public class RegistrarComercioUseCaseImpl implements RegistrarComercioUseCase {
 
         Comercio comercio = Comercio.crear(request.ruc(), request.nombre(), request.telefono(), request.email(), direccion);
 
-        Comercio comercioGuardado = repositorioComercio.guardar(comercio);
+        String passwordHash = passwordEncoder.encode(request.password());
+        Comercio comercioGuardado = repositorioComercio.guardar(comercio, passwordHash);
 
         publicadorEventos.publishEvent(new ComercioRegistrado(
                 comercioGuardado.getId(),

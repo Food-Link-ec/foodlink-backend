@@ -9,6 +9,8 @@ public interface IRepositorioComprador {
 
     Comprador guardar(Comprador comprador);
 
+    Comprador guardar(Comprador comprador, String passwordHash);
+
     Optional<Comprador> buscarPorId(UUID id);
 
     Optional<Comprador> buscarPorCedula(String cedula);
