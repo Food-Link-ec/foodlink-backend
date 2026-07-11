@@ -28,7 +28,7 @@ class PostgresRepositorioBeneficiarioTest {
     static class ConfiguracionPrueba {
     }
 
-    private static final String RUC_REGISTRADO = "1791234560001";
+    private static final String RUC_REGISTRADO = "1710034065001";
     private static final String RUC_NO_REGISTRADO = "0961234567001";
 
     @Autowired
@@ -53,8 +53,8 @@ class PostgresRepositorioBeneficiarioTest {
         Beneficiario guardado = repositorio.guardar(beneficiario);
 
         assertNotNull(guardado.getId());
-        assertEquals(RUC_REGISTRADO, guardado.getRuc());
-        assertEquals("Fundación Alimentando Quito", guardado.getNombre());
+        assertEquals(RUC_REGISTRADO, guardado.getRuc().valor());
+        assertEquals("Fundación Alimentando Quito", guardado.getNombre().valor());
     }
 
     @Test
@@ -66,7 +66,7 @@ class PostgresRepositorioBeneficiarioTest {
         Optional<Beneficiario> encontrado = repositorio.buscarPorRuc(RUC_REGISTRADO);
 
         assertTrue(encontrado.isPresent());
-        assertEquals(RUC_REGISTRADO, encontrado.get().getRuc());
+        assertEquals(RUC_REGISTRADO, encontrado.get().getRuc().valor());
     }
 
     @Test
@@ -88,7 +88,7 @@ class PostgresRepositorioBeneficiarioTest {
         Optional<Beneficiario> encontrado = repositorio.buscarPorId(guardado.getId());
 
         assertTrue(encontrado.isPresent());
-        assertEquals(RUC_REGISTRADO, encontrado.get().getRuc());
-        assertEquals("Fundación Alimentando Quito", encontrado.get().getNombre());
+        assertEquals(RUC_REGISTRADO, encontrado.get().getRuc().valor());
+        assertEquals("Fundación Alimentando Quito", encontrado.get().getNombre().valor());
     }
 }

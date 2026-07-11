@@ -11,10 +11,10 @@ public class ComercioMapper {
     public ComercioJpaEntity toEntity(Comercio comercio) {
         ComercioJpaEntity entity = new ComercioJpaEntity();
         entity.setId(comercio.getId());
-        entity.setRuc(comercio.getRuc());
-        entity.setNombre(comercio.getNombre());
-        entity.setTelefono(comercio.getTelefono());
-        entity.setEmail(comercio.getEmail());
+        entity.setRuc(comercio.getRuc().valor());
+        entity.setNombre(comercio.getNombre().valor());
+        entity.setTelefono(comercio.getTelefono().valor());
+        entity.setEmail(comercio.getEmail().valor());
         entity.setEstado(comercio.getEstado());
         entity.setFechaRegistro(comercio.getFechaRegistro());
 

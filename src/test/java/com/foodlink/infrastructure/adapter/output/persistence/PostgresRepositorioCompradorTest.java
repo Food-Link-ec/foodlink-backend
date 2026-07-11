@@ -48,8 +48,8 @@ class PostgresRepositorioCompradorTest {
         Comprador guardado = repositorio.guardar(comprador);
 
         assertNotNull(guardado.getId());
-        assertEquals(CEDULA_REGISTRADA, guardado.getCedula());
-        assertEquals("Carlos", guardado.getNombre());
+        assertEquals(CEDULA_REGISTRADA, guardado.getCedula().valor());
+        assertEquals("Carlos", guardado.getNombre().valor());
         assertTrue(guardado.estaActivo());
     }
 
@@ -62,7 +62,7 @@ class PostgresRepositorioCompradorTest {
         Optional<Comprador> encontrado = repositorio.buscarPorCedula(CEDULA_REGISTRADA);
 
         assertTrue(encontrado.isPresent());
-        assertEquals(CEDULA_REGISTRADA, encontrado.get().getCedula());
+        assertEquals(CEDULA_REGISTRADA, encontrado.get().getCedula().valor());
     }
 
     @Test
@@ -84,7 +84,7 @@ class PostgresRepositorioCompradorTest {
         Optional<Comprador> encontrado = repositorio.buscarPorId(guardado.getId());
 
         assertTrue(encontrado.isPresent());
-        assertEquals(CEDULA_REGISTRADA, encontrado.get().getCedula());
-        assertEquals("Carlos", encontrado.get().getNombre());
+        assertEquals(CEDULA_REGISTRADA, encontrado.get().getCedula().valor());
+        assertEquals("Carlos", encontrado.get().getNombre().valor());
     }
 }

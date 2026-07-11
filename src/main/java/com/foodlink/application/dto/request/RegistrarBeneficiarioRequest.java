@@ -1,13 +1,17 @@
 package com.foodlink.application.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public record RegistrarBeneficiarioRequest(
-        String nombre,
-        String ruc,
-        String email,
-        String telefono,
-        String provincia,
-        String ciudad,
-        String callePrincipal,
+        @NotBlank @Size(max = 200) String nombre,
+        @NotBlank String ruc,
+        @NotBlank @Email String email,
+        @NotBlank String telefono,
+        @NotBlank String provincia,
+        @NotBlank String ciudad,
+        @NotBlank String callePrincipal,
         String calleSecundaria,
         String referencia,
         String password

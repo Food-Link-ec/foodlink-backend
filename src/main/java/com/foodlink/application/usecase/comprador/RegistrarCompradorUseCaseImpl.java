@@ -39,17 +39,17 @@ public class RegistrarCompradorUseCaseImpl implements RegistrarCompradorUseCase 
 
         publicadorEventos.publishEvent(new CompradorRegistrado(
                 compradorGuardado.getId(),
-                compradorGuardado.getCedula(),
-                compradorGuardado.getNombre(),
+                compradorGuardado.getCedula().valor(),
+                compradorGuardado.getNombre().valor(),
                 LocalDateTime.now()
         ));
 
         return new CompradorResponse(
                 compradorGuardado.getId(),
-                compradorGuardado.getCedula(),
-                compradorGuardado.getNombre(),
-                compradorGuardado.getApellido(),
-                compradorGuardado.getEmail(),
+                compradorGuardado.getCedula().valor(),
+                compradorGuardado.getNombre().valor(),
+                compradorGuardado.getApellido().valor(),
+                compradorGuardado.getEmail().valor(),
                 compradorGuardado.estaActivo(),
                 compradorGuardado.getFechaRegistro()
         );

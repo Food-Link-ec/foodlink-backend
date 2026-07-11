@@ -1,8 +1,9 @@
 package com.foodlink.domain.model.comercio;
 
 import com.foodlink.domain.model.comercio.exception.ComercioInvalidoException;
-import com.foodlink.domain.model.comercio.exception.RucInvalidoException;
 import com.foodlink.domain.model.shared.Direccion;
+import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
+import com.foodlink.domain.model.shared.exception.RucInvalidoException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,8 +26,8 @@ class ComercioTest {
                 "contacto@elahorro.com", direccionValida());
 
         assertNotNull(comercio.getId());
-        assertEquals(RUC_VALIDO, comercio.getRuc());
-        assertEquals("Supermercado El Ahorro", comercio.getNombre());
+        assertEquals(RUC_VALIDO, comercio.getRuc().valor());
+        assertEquals("Supermercado El Ahorro", comercio.getNombre().valor());
         assertEquals(EstadoComercio.PENDIENTE_VERIFICACION, comercio.getEstado());
         assertNotNull(comercio.getFechaRegistro());
     }
@@ -40,7 +41,7 @@ class ComercioTest {
 
     @Test
     void deberiaFallarAlCrearConNombreVacio() {
-        assertThrows(ComercioInvalidoException.class, () ->
+        assertThrows(NombreInvalidoException.class, () ->
                 Comercio.crear(RUC_VALIDO, "", "0991234567",
                         "contacto@elahorro.com", direccionValida()));
     }

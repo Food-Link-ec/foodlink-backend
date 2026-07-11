@@ -1,27 +1,27 @@
 package com.foodlink.domain.model.comercio;
 
 import com.foodlink.domain.model.comercio.exception.ComercioInvalidoException;
-import com.foodlink.domain.model.comercio.exception.RucInvalidoException;
 import com.foodlink.domain.model.shared.Direccion;
+import com.foodlink.domain.model.shared.Email;
+import com.foodlink.domain.model.shared.NombreOrganizacion;
+import com.foodlink.domain.model.shared.RucEcuatoriano;
+import com.foodlink.domain.model.shared.TelefonoEcuatoriano;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class Comercio {
 
-    private static final Pattern PATRON_RUC = Pattern.compile("\\d{13}");
-
     private final UUID id;
-    private final String ruc;
-    private final String nombre;
-    private final String telefono;
-    private final String email;
+    private final RucEcuatoriano ruc;
+    private final NombreOrganizacion nombre;
+    private final TelefonoEcuatoriano telefono;
+    private final Email email;
     private final Direccion direccion;
     private EstadoComercio estado;
     private final LocalDateTime fechaRegistro;
 
-    private Comercio(UUID id, String ruc, String nombre, String telefono, String email,
+    private Comercio(UUID id, RucEcuatoriano ruc, NombreOrganizacion nombre, TelefonoEcuatoriano telefono, Email email,
                       Direccion direccion, EstadoComercio estado, LocalDateTime fechaRegistro) {
         this.id = id;
         this.ruc = ruc;
@@ -34,24 +34,12 @@ public class Comercio {
     }
 
     public static Comercio crear(String ruc, String nombre, String telefono, String email, Direccion direccion) {
-        if (!validarRuc(ruc)) {
-            throw new RucInvalidoException("El RUC '" + ruc + "' no es válido");
-        }
-        if (nombre == null || nombre.isBlank()) {
-            throw new ComercioInvalidoException("El nombre del comercio es obligatorio");
-        }
-        if (telefono == null || telefono.isBlank()) {
-            throw new ComercioInvalidoException("El teléfono del comercio es obligatorio");
-        }
-        if (email == null || email.isBlank()) {
-            throw new ComercioInvalidoException("El email del comercio es obligatorio");
-        }
         return new Comercio(
                 UUID.randomUUID(),
-                ruc,
-                nombre,
-                telefono,
-                email,
+                RucEcuatoriano.de(ruc),
+                NombreOrganizacion.de(nombre),
+                TelefonoEcuatoriano.de(telefono),
+                Email.de(email),
                 direccion,
                 EstadoComercio.PENDIENTE_VERIFICACION,
                 LocalDateTime.now()
@@ -60,22 +48,16 @@ public class Comercio {
 
     public static Comercio reconstituir(UUID id, String ruc, String nombre, String telefono, String email,
                                          Direccion direccion, EstadoComercio estado, LocalDateTime fechaRegistro) {
-        return new Comercio(id, ruc, nombre, telefono, email, direccion, estado, fechaRegistro);
-    }
-
-    private static boolean validarRuc(String ruc) {
-        if (ruc == null || !PATRON_RUC.matcher(ruc).matches()) {
-            return false;
-        }
-        int codigoProvincia = Integer.parseInt(ruc.substring(0, 2));
-        if (codigoProvincia < 1 || codigoProvincia > 24) {
-            return false;
-        }
-        char tercerDigito = ruc.charAt(2);
-        if (tercerDigito != '6' && tercerDigito != '9') {
-            return false;
-        }
-        return ruc.substring(10, 13).equals("001");
+        return new Comercio(
+                id,
+                RucEcuatoriano.de(ruc),
+                NombreOrganizacion.de(nombre),
+                TelefonoEcuatoriano.de(telefono),
+                Email.de(email),
+                direccion,
+                estado,
+                fechaRegistro
+        );
     }
 
     public void verificar() {
@@ -111,19 +93,19 @@ public class Comercio {
         return id;
     }
 
-    public String getRuc() {
+    public RucEcuatoriano getRuc() {
         return ruc;
     }
 
-    public String getNombre() {
+    public NombreOrganizacion getNombre() {
         return nombre;
     }
 
-    public String getTelefono() {
+    public TelefonoEcuatoriano getTelefono() {
         return telefono;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 

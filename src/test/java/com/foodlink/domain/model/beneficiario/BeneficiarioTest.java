@@ -2,6 +2,8 @@ package com.foodlink.domain.model.beneficiario;
 
 import com.foodlink.domain.model.beneficiario.exception.BeneficiarioInvalidoException;
 import com.foodlink.domain.model.shared.Direccion;
+import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
+import com.foodlink.domain.model.shared.exception.RucInvalidoException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,20 +26,20 @@ class BeneficiarioTest {
                 "contacto@manosunidas.org", "0991234567", direccionValida());
 
         assertNotNull(beneficiario.getId());
-        assertEquals("Fundación Manos Unidas", beneficiario.getNombre());
+        assertEquals("Fundación Manos Unidas", beneficiario.getNombre().valor());
         assertEquals(EstadoVerificacion.PENDIENTE, beneficiario.getEstadoVerificacion());
         assertNotNull(beneficiario.getFechaRegistro());
     }
 
     @Test
     void deberiaFallarAlRegistrarConNombreVacio() {
-        assertThrows(BeneficiarioInvalidoException.class, () ->
+        assertThrows(NombreInvalidoException.class, () ->
                 Beneficiario.registrar("", RUC_VALIDO, "contacto@manosunidas.org", "0991234567", direccionValida()));
     }
 
     @Test
     void deberiaFallarAlRegistrarConRucInvalido() {
-        assertThrows(BeneficiarioInvalidoException.class, () ->
+        assertThrows(RucInvalidoException.class, () ->
                 Beneficiario.registrar("Fundación Manos Unidas", "12345", "contacto@manosunidas.org",
                         "0991234567", direccionValida()));
     }

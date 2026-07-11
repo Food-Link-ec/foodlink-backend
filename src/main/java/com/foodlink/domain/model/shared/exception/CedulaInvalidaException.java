@@ -1,4 +1,4 @@
-package com.foodlink.domain.model.comprador.exception;
+package com.foodlink.domain.model.shared.exception;
 
 public class CedulaInvalidaException extends RuntimeException {
 

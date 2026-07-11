@@ -4,9 +4,12 @@ import com.foodlink.application.dto.response.ApiErrorResponse;
 import com.foodlink.domain.model.auth.exception.TokenInvalidoException;
 import com.foodlink.domain.model.beneficiario.exception.BeneficiarioInvalidoException;
 import com.foodlink.domain.model.comercio.exception.ComercioInvalidoException;
-import com.foodlink.domain.model.comercio.exception.RucInvalidoException;
-import com.foodlink.domain.model.comprador.exception.CedulaInvalidaException;
 import com.foodlink.domain.model.comprador.exception.CompradorInvalidoException;
+import com.foodlink.domain.model.shared.exception.CedulaInvalidaException;
+import com.foodlink.domain.model.shared.exception.EmailInvalidoException;
+import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
+import com.foodlink.domain.model.shared.exception.RucInvalidoException;
+import com.foodlink.domain.model.shared.exception.TelefonoInvalidoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +46,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CedulaInvalidaException.class)
     public ResponseEntity<ApiErrorResponse> manejarCedulaInvalida(CedulaInvalidaException ex) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> manejarEmailInvalido(EmailInvalidoException ex) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler(TelefonoInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> manejarTelefonoInvalido(TelefonoInvalidoException ex) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler(NombreInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> manejarNombreInvalido(NombreInvalidoException ex) {
         return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
     }
 

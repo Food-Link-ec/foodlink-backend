@@ -11,10 +11,10 @@ public class BeneficiarioMapper {
     public BeneficiarioJpaEntity toEntity(Beneficiario beneficiario) {
         BeneficiarioJpaEntity entity = new BeneficiarioJpaEntity();
         entity.setId(beneficiario.getId());
-        entity.setNombre(beneficiario.getNombre());
-        entity.setRuc(beneficiario.getRuc());
-        entity.setEmail(beneficiario.getEmail());
-        entity.setTelefono(beneficiario.getTelefono());
+        entity.setNombre(beneficiario.getNombre().valor());
+        entity.setRuc(beneficiario.getRuc().valor());
+        entity.setEmail(beneficiario.getEmail().valor());
+        entity.setTelefono(beneficiario.getTelefono().valor());
         entity.setEstadoVerificacion(beneficiario.getEstadoVerificacion());
         entity.setFechaRegistro(beneficiario.getFechaRegistro());
 

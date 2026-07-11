@@ -49,16 +49,16 @@ public class RegistrarBeneficiarioUseCaseImpl implements RegistrarBeneficiarioUs
 
         publicadorEventos.publishEvent(new BeneficiarioRegistrado(
                 beneficiarioGuardado.getId(),
-                beneficiarioGuardado.getRuc(),
-                beneficiarioGuardado.getNombre(),
+                beneficiarioGuardado.getRuc().valor(),
+                beneficiarioGuardado.getNombre().valor(),
                 LocalDateTime.now()
         ));
 
         return new BeneficiarioResponse(
                 beneficiarioGuardado.getId(),
-                beneficiarioGuardado.getNombre(),
-                beneficiarioGuardado.getRuc(),
-                beneficiarioGuardado.getEmail(),
+                beneficiarioGuardado.getNombre().valor(),
+                beneficiarioGuardado.getRuc().valor(),
+                beneficiarioGuardado.getEmail().valor(),
                 beneficiarioGuardado.getEstadoVerificacion().name(),
                 beneficiarioGuardado.getFechaRegistro()
         );

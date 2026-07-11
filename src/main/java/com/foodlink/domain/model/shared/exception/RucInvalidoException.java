@@ -1,4 +1,4 @@
-package com.foodlink.domain.model.comercio.exception;
+package com.foodlink.domain.model.shared.exception;
 
 public class RucInvalidoException extends RuntimeException {
 
