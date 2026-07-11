@@ -91,7 +91,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
                 credenciales.usuarioId(), credenciales.email(), credenciales.rol(), credenciales.tipoUsuario());
 
         return new AuthResponse(nuevoAccessToken, refreshToken, credenciales.tipoUsuario(),
-                credenciales.usuarioId(), credenciales.email(), credenciales.rol(), expirationMs);
+                credenciales.usuarioId(), credenciales.email(), credenciales.rol(), credenciales.nombre(), expirationMs);
     }
 
     @Override
@@ -116,40 +116,40 @@ public class LoginUseCaseImpl implements LoginUseCase {
         refreshTokenJpaRepository.save(entity);
 
         return new AuthResponse(accessToken, refreshToken, credenciales.tipoUsuario(),
-                credenciales.usuarioId(), credenciales.email(), credenciales.rol(), expirationMs);
+                credenciales.usuarioId(), credenciales.email(), credenciales.rol(), credenciales.nombre(), expirationMs);
     }
 
     private Optional<Credenciales> buscarCredencialesPorEmail(String email) {
         Optional<Credenciales> comercio = comercioJpaRepository.findByEmail(email)
                 .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                        "ROLE_COMERCIO", "COMERCIO"));
+                        "ROLE_COMERCIO", "COMERCIO", entity.getNombre()));
         if (comercio.isPresent()) {
             return comercio;
         }
 
         Optional<Credenciales> beneficiario = beneficiarioJpaRepository.findByEmail(email)
                 .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                        "ROLE_BENEFICIARIO", "BENEFICIARIO"));
+                        "ROLE_BENEFICIARIO", "BENEFICIARIO", entity.getNombre()));
         if (beneficiario.isPresent()) {
             return beneficiario;
         }
 
         return compradorJpaRepository.findByEmail(email)
                 .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                        "ROLE_COMPRADOR", "COMPRADOR"));
+                        "ROLE_COMPRADOR", "COMPRADOR", entity.getNombre() + " " + entity.getApellido()));
     }
 
     private Optional<Credenciales> buscarCredencialesPorId(UUID usuarioId, String tipoUsuario) {
         return switch (tipoUsuario) {
             case "COMERCIO" -> comercioJpaRepository.findById(usuarioId)
                     .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                            "ROLE_COMERCIO", "COMERCIO"));
+                            "ROLE_COMERCIO", "COMERCIO", entity.getNombre()));
             case "BENEFICIARIO" -> beneficiarioJpaRepository.findById(usuarioId)
                     .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                            "ROLE_BENEFICIARIO", "BENEFICIARIO"));
+                            "ROLE_BENEFICIARIO", "BENEFICIARIO", entity.getNombre()));
             case "COMPRADOR" -> compradorJpaRepository.findById(usuarioId)
                     .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
-                            "ROLE_COMPRADOR", "COMPRADOR"));
+                            "ROLE_COMPRADOR", "COMPRADOR", entity.getNombre() + " " + entity.getApellido()));
             default -> Optional.empty();
         };
     }
@@ -163,6 +163,6 @@ public class LoginUseCaseImpl implements LoginUseCase {
         }
     }
 
-    private record Credenciales(UUID usuarioId, String email, String passwordHash, String rol, String tipoUsuario) {
+    private record Credenciales(UUID usuarioId, String email, String passwordHash, String rol, String tipoUsuario, String nombre) {
     }
 }
