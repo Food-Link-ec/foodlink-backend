@@ -49,17 +49,17 @@ public class RegistrarComercioUseCaseImpl implements RegistrarComercioUseCase {
 
         publicadorEventos.publishEvent(new ComercioRegistrado(
                 comercioGuardado.getId(),
-                comercioGuardado.getRuc(),
-                comercioGuardado.getNombre(),
+                comercioGuardado.getRuc().valor(),
+                comercioGuardado.getNombre().valor(),
                 LocalDateTime.now()
         ));
 
         return new ComercioResponse(
                 comercioGuardado.getId(),
-                comercioGuardado.getRuc(),
-                comercioGuardado.getNombre(),
-                comercioGuardado.getTelefono(),
-                comercioGuardado.getEmail(),
+                comercioGuardado.getRuc().valor(),
+                comercioGuardado.getNombre().valor(),
+                comercioGuardado.getTelefono().valor(),
+                comercioGuardado.getEmail().valor(),
                 comercioGuardado.getEstado().name(),
                 comercioGuardado.getFechaRegistro()
         );
