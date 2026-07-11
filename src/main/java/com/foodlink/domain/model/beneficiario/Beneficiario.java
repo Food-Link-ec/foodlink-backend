@@ -48,7 +48,16 @@ public class Beneficiario {
 
     public static Beneficiario reconstituir(UUID id, String nombre, String ruc, String email, String telefono,
                                              Direccion direccion, EstadoVerificacion estadoVerificacion, LocalDateTime fechaRegistro) {
-        return new Beneficiario(id, nombre, ruc, email, telefono, direccion, estadoVerificacion, fechaRegistro);
+        return new Beneficiario(
+                id,
+                NombreOrganizacion.de(nombre),
+                RucEcuatoriano.de(ruc),
+                Email.de(email),
+                TelefonoEcuatoriano.de(telefono),
+                direccion,
+                estadoVerificacion,
+                fechaRegistro
+        );
     }
 
     public void verificar() {

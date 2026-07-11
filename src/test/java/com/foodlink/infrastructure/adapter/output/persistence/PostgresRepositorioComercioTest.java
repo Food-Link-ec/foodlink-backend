@@ -31,7 +31,7 @@ class PostgresRepositorioComercioTest {
     }
 
     private static final String RUC_PENDIENTE = "1792146739001";
-    private static final String RUC_VERIFICADO = "0961234567001";
+    private static final String RUC_VERIFICADO = "1760001390001";
 
     @Autowired
     private ComercioJpaRepository comercioJpaRepository;
@@ -55,8 +55,8 @@ class PostgresRepositorioComercioTest {
         Comercio guardado = repositorio.guardar(comercio);
 
         assertNotNull(guardado.getId());
-        assertEquals(RUC_PENDIENTE, guardado.getRuc());
-        assertEquals("Supermercado El Ahorro", guardado.getNombre());
+        assertEquals(RUC_PENDIENTE, guardado.getRuc().valor());
+        assertEquals("Supermercado El Ahorro", guardado.getNombre().valor());
     }
 
     @Test
@@ -68,7 +68,7 @@ class PostgresRepositorioComercioTest {
         Optional<Comercio> encontrado = repositorio.buscarPorRuc(RUC_PENDIENTE);
 
         assertTrue(encontrado.isPresent());
-        assertEquals(RUC_PENDIENTE, encontrado.get().getRuc());
+        assertEquals(RUC_PENDIENTE, encontrado.get().getRuc().valor());
     }
 
     @Test
@@ -95,6 +95,6 @@ class PostgresRepositorioComercioTest {
         List<Comercio> pendientes = repositorio.buscarPorEstado(EstadoComercio.PENDIENTE_VERIFICACION);
 
         assertEquals(1, pendientes.size());
-        assertEquals(RUC_PENDIENTE, pendientes.get(0).getRuc());
+        assertEquals(RUC_PENDIENTE, pendientes.get(0).getRuc().valor());
     }
 }
