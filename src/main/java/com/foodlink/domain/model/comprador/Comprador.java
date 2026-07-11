@@ -1,27 +1,27 @@
 package com.foodlink.domain.model.comprador;
 
-import com.foodlink.domain.model.comprador.exception.CedulaInvalidaException;
 import com.foodlink.domain.model.comprador.exception.CompradorInvalidoException;
+import com.foodlink.domain.model.shared.CedulaEcuatoriana;
+import com.foodlink.domain.model.shared.Email;
+import com.foodlink.domain.model.shared.NombrePersona;
+import com.foodlink.domain.model.shared.TelefonoEcuatoriano;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class Comprador {
 
-    private static final Pattern PATRON_CEDULA = Pattern.compile("\\d{10}");
-
     private final UUID id;
-    private final String cedula;
-    private final String nombre;
-    private final String apellido;
-    private final String email;
-    private final String telefono;
+    private final CedulaEcuatoriana cedula;
+    private final NombrePersona nombre;
+    private final NombrePersona apellido;
+    private final Email email;
+    private final TelefonoEcuatoriano telefono;
     private final LocalDateTime fechaRegistro;
     private boolean activo;
 
-    private Comprador(UUID id, String cedula, String nombre, String apellido, String email,
-                       String telefono, LocalDateTime fechaRegistro, boolean activo) {
+    private Comprador(UUID id, CedulaEcuatoriana cedula, NombrePersona nombre, NombrePersona apellido, Email email,
+                       TelefonoEcuatoriano telefono, LocalDateTime fechaRegistro, boolean activo) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
@@ -33,28 +33,13 @@ public class Comprador {
     }
 
     public static Comprador registrar(String cedula, String nombre, String apellido, String email, String telefono) {
-        if (cedula == null || cedula.isBlank()) {
-            throw new CedulaInvalidaException("La cédula es obligatoria");
-        }
-        if (!validarCedula(cedula)) {
-            throw new CedulaInvalidaException("La cédula '" + cedula + "' no es válida");
-        }
-        if (nombre == null || nombre.isBlank()) {
-            throw new CompradorInvalidoException("El nombre del comprador es obligatorio");
-        }
-        if (apellido == null || apellido.isBlank()) {
-            throw new CompradorInvalidoException("El apellido del comprador es obligatorio");
-        }
-        if (email == null || email.isBlank()) {
-            throw new CompradorInvalidoException("El email del comprador es obligatorio");
-        }
         return new Comprador(
                 UUID.randomUUID(),
-                cedula,
-                nombre,
-                apellido,
-                email,
-                telefono,
+                CedulaEcuatoriana.de(cedula),
+                NombrePersona.de(nombre),
+                NombrePersona.de(apellido),
+                Email.de(email),
+                telefono == null || telefono.isBlank() ? null : TelefonoEcuatoriano.de(telefono),
                 LocalDateTime.now(),
                 true
         );
@@ -62,36 +47,16 @@ public class Comprador {
 
     public static Comprador reconstituir(UUID id, String cedula, String nombre, String apellido, String email,
                                           String telefono, LocalDateTime fechaRegistro, boolean activo) {
-        return new Comprador(id, cedula, nombre, apellido, email, telefono, fechaRegistro, activo);
-    }
-
-    private static boolean validarCedula(String cedula) {
-        if (!PATRON_CEDULA.matcher(cedula).matches()) {
-            return false;
-        }
-        int codigoProvincia = Integer.parseInt(cedula.substring(0, 2));
-        if (codigoProvincia < 1 || codigoProvincia > 24) {
-            return false;
-        }
-        int tercerDigito = Character.getNumericValue(cedula.charAt(2));
-        if (tercerDigito >= 6) {
-            return false;
-        }
-        int suma = 0;
-        for (int posicion = 0; posicion < 9; posicion++) {
-            int digito = Character.getNumericValue(cedula.charAt(posicion));
-            if (posicion % 2 == 0) {
-                int valor = digito * 2;
-                if (valor >= 10) {
-                    valor -= 9;
-                }
-                suma += valor;
-            } else {
-                suma += digito;
-            }
-        }
-        int digitoVerificador = Character.getNumericValue(cedula.charAt(9));
-        return (suma + digitoVerificador) % 10 == 0;
+        return new Comprador(
+                id,
+                CedulaEcuatoriana.de(cedula),
+                NombrePersona.de(nombre),
+                NombrePersona.de(apellido),
+                Email.de(email),
+                telefono == null || telefono.isBlank() ? null : TelefonoEcuatoriano.de(telefono),
+                fechaRegistro,
+                activo
+        );
     }
 
     public void desactivar() {
@@ -116,23 +81,23 @@ public class Comprador {
         return id;
     }
 
-    public String getCedula() {
+    public CedulaEcuatoriana getCedula() {
         return cedula;
     }
 
-    public String getNombre() {
+    public NombrePersona getNombre() {
         return nombre;
     }
 
-    public String getApellido() {
+    public NombrePersona getApellido() {
         return apellido;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public String getTelefono() {
+    public TelefonoEcuatoriano getTelefono() {
         return telefono;
     }
 
