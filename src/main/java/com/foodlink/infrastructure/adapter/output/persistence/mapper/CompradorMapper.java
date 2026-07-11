@@ -10,11 +10,11 @@ public class CompradorMapper {
     public CompradorJpaEntity toEntity(Comprador comprador) {
         CompradorJpaEntity entity = new CompradorJpaEntity();
         entity.setId(comprador.getId());
-        entity.setCedula(comprador.getCedula());
-        entity.setNombre(comprador.getNombre());
-        entity.setApellido(comprador.getApellido());
-        entity.setEmail(comprador.getEmail());
-        entity.setTelefono(comprador.getTelefono());
+        entity.setCedula(comprador.getCedula().valor());
+        entity.setNombre(comprador.getNombre().valor());
+        entity.setApellido(comprador.getApellido().valor());
+        entity.setEmail(comprador.getEmail().valor());
+        entity.setTelefono(comprador.getTelefono() == null ? null : comprador.getTelefono().valor());
         entity.setActivo(comprador.estaActivo());
         entity.setFechaRegistro(comprador.getFechaRegistro());
         return entity;
