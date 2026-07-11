@@ -8,6 +8,7 @@ import com.foodlink.domain.model.comprador.exception.CompradorInvalidoException;
 import com.foodlink.domain.model.shared.exception.CedulaInvalidaException;
 import com.foodlink.domain.model.shared.exception.EmailInvalidoException;
 import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
+import com.foodlink.domain.model.shared.exception.PinInvalidoException;
 import com.foodlink.domain.model.shared.exception.RucInvalidoException;
 import com.foodlink.domain.model.shared.exception.TelefonoInvalidoException;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NombreInvalidoException.class)
     public ResponseEntity<ApiErrorResponse> manejarNombreInvalido(NombreInvalidoException ex) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler(PinInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> manejarPinInvalido(PinInvalidoException ex) {
         return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
     }
 
