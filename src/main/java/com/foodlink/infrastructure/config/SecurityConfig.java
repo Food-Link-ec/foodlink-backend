@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/comercios", "/api/v1/beneficiarios", "/api/v1/compradores").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/lotes").hasAnyRole("COMERCIO", "ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/retiros/**").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/redistribucion/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
