@@ -1,0 +1,31 @@
+package com.foodlink.application.usecase.retiro;
+
+import com.foodlink.application.dto.request.ValidarPinRequest;
+import com.foodlink.domain.port.input.ValidarPinUseCase;
+import com.foodlink.domain.port.output.IRepositorioPin;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+public class ValidarPinUseCaseImpl implements ValidarPinUseCase {
+
+    private final IRepositorioPin repositorioPin;
+
+    public ValidarPinUseCaseImpl(IRepositorioPin repositorioPin) {
+        this.repositorioPin = repositorioPin;
+    }
+
+    @Override
+    public void validarPin(ValidarPinRequest request, UUID receptorId) {
+        String pinGuardado = repositorioPin.buscarPorLote(request.loteId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "PIN no encontrado o expirado para este lote"));
+
+        if (!pinGuardado.equalsIgnoreCase(request.pin())) {
+            throw new IllegalArgumentException("PIN inválido");
+        }
+
+        repositorioPin.marcarUsado(request.loteId());
+    }
+}
