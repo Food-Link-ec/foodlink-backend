@@ -2,6 +2,7 @@ package com.foodlink.domain.port.output;
 
 import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
+import com.foodlink.domain.model.lote.Modalidad;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface IRepositorioLote {
     List<LoteExcedente> buscarDisponibles();
 
     List<LoteExcedente> buscarExpirados();
+
+    List<LoteExcedente> buscarDisponiblesPorModalidad(Modalidad modalidad);
 }
