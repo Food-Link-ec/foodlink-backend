@@ -1,7 +1,8 @@
 package com.foodlink.domain.model.comprador;
 
-import com.foodlink.domain.model.comprador.exception.CedulaInvalidaException;
 import com.foodlink.domain.model.comprador.exception.CompradorInvalidoException;
+import com.foodlink.domain.model.shared.exception.CedulaInvalidaException;
+import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ class CompradorTest {
                 "juan.perez@mail.com", "0991234567");
 
         assertNotNull(comprador.getId());
-        assertEquals(CEDULA_VALIDA, comprador.getCedula());
+        assertEquals(CEDULA_VALIDA, comprador.getCedula().valor());
         assertTrue(comprador.estaActivo());
         assertNotNull(comprador.getFechaRegistro());
     }
@@ -45,7 +46,7 @@ class CompradorTest {
 
     @Test
     void deberiaFallarAlRegistrarConNombreVacio() {
-        assertThrows(CompradorInvalidoException.class, () ->
+        assertThrows(NombreInvalidoException.class, () ->
                 Comprador.registrar(CEDULA_VALIDA, "", "Pérez", "juan.perez@mail.com", "0991234567"));
     }
 
