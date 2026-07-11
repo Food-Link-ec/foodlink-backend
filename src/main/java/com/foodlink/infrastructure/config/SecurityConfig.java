@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/lotes", "/api/v1/lotes/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/actuator/health", "/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/comercios", "/api/v1/beneficiarios", "/api/v1/compradores").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/lotes").hasRole("COMERCIO")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/lotes").hasAnyRole("COMERCIO", "ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/retiros/**").authenticated()
                         .anyRequest().authenticated()
                 )
