@@ -60,7 +60,8 @@ public class ConfirmarTransaccionUseCaseImpl implements ConfirmarTransaccionUseC
                 lote.getDescripcion(),
                 lote.getFotosUrl(),
                 lote.getLatitud(),
-                lote.getLongitud()
+                lote.getLongitud(),
+                lote.getCategoria()
         );
     }
 }
