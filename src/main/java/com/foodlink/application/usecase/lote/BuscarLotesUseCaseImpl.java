@@ -46,6 +46,12 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
             lotes = repositorioLote.buscarDisponibles();
         }
 
+        if (request.categoria() != null && !request.categoria().isBlank()) {
+            lotes = lotes.stream()
+                    .filter(lote -> request.categoria().equalsIgnoreCase(lote.getCategoria()))
+                    .collect(Collectors.toList());
+        }
+
         return lotes.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
