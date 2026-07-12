@@ -52,6 +52,11 @@ foodlink:
   scheduler:
     reservas-delay-ms: ${SCHEDULER_RESERVAS_DELAY_MS:60000}
     lotes-delay-ms: ${SCHEDULER_LOTES_DELAY_MS:300000}
+  ia:
+    gemini-api-key: ${GEMINI_API_KEY:placeholder}
+    gemini-model: ${GEMINI_MODEL:gemini-2.5-flash-lite}
+    tesseract-data-path: ${TESSERACT_DATA_PATH:}
+    ocr-confidence-threshold: ${OCR_CONFIDENCE_THRESHOLD:85}
 
 server:
   port: ${SERVER_PORT:8080}
