@@ -60,6 +60,10 @@ public class LoteJpaEntity {
     @Column(name = "inicio_reserva")
     private LocalDateTime inicioReserva;
 
+    private Double latitud;
+
+    private Double longitud;
+
     @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;
 
