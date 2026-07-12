@@ -10,6 +10,7 @@ public record BuscarLotesRequest(
         Double longitud,
         Double radioKm,
         String q,
+        String categoria,
         int page,
         int size
 ) {
