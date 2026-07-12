@@ -4,6 +4,7 @@ import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.model.lote.Modalidad;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,4 +26,8 @@ public interface IRepositorioLote {
     List<LoteExcedente> buscarDisponiblesPorModalidad(Modalidad modalidad);
 
     List<LoteExcedente> buscarDisponiblesCercanos(double latitud, double longitud, double radioKm);
+
+    List<LoteExcedente> buscarReservasExpiradas(LocalDateTime limiteInicio);
+
+    List<LoteExcedente> buscarLotesCaducados();
 }
