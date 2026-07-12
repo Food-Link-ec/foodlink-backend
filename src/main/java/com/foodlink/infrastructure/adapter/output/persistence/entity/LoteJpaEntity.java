@@ -66,6 +66,9 @@ public class LoteJpaEntity {
     @Column(columnDefinition = "numeric")
     private Double longitud;
 
+    @Column(length = 20)
+    private String categoria;
+
     @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;
 

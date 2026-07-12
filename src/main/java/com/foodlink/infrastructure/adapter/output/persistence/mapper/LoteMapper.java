@@ -34,6 +34,7 @@ public class LoteMapper {
         entity.setInicioReserva(lote.getInicioReserva());
         entity.setLatitud(lote.getLatitud());
         entity.setLongitud(lote.getLongitud());
+        entity.setCategoria(lote.getCategoria());
         entity.setCreadoEn(LocalDateTime.now());
         entity.setActualizadoEn(LocalDateTime.now());
 
@@ -72,7 +73,8 @@ public class LoteMapper {
                 entity.getBeneficiarioReservaId(),
                 entity.getInicioReserva(),
                 entity.getLatitud(),
-                entity.getLongitud()
+                entity.getLongitud(),
+                entity.getCategoria()
         );
     }
 }
