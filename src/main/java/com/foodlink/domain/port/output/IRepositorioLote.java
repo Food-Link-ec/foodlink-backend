@@ -1,4 +1,4 @@
-package com.foodlink.domain.port.output;
+package com.foodlink.application.dto.request;
 
 import com.foodlink.application.dto.request.BuscarLotesRequest;
 import com.foodlink.domain.model.lote.EstadoLote;
