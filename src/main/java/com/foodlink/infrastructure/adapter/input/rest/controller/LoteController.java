@@ -50,8 +50,12 @@ public class LoteController {
     public ResponseEntity<List<LoteResponse>> buscar(
             @RequestParam(required = false) String modalidad,
             @RequestParam(required = false) String estado,
-            @RequestParam(required = false) UUID comercioId) {
-        BuscarLotesRequest request = new BuscarLotesRequest(modalidad, estado, comercioId);
+            @RequestParam(required = false) UUID comercioId,
+            @RequestParam(required = false) Double latitud,
+            @RequestParam(required = false) Double longitud,
+            @RequestParam(required = false) Double radioKm) {
+        BuscarLotesRequest request = new BuscarLotesRequest(
+                modalidad, estado, comercioId, latitud, longitud, radioKm);
         return ResponseEntity.ok(buscarLotesUseCase.buscar(request));
     }
 
