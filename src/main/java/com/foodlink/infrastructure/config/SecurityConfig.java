@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/lotes").hasAnyRole("COMERCIO", "ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/retiros/**").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/redistribucion/**").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
