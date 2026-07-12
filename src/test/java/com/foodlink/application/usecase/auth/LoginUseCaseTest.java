@@ -8,6 +8,7 @@ import com.foodlink.infrastructure.adapter.output.persistence.entity.Beneficiari
 import com.foodlink.infrastructure.adapter.output.persistence.entity.ComercioJpaEntity;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.CompradorJpaEntity;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.RefreshTokenJpaEntity;
+import com.foodlink.infrastructure.adapter.output.persistence.repository.AdministradorJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.BeneficiarioJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.ComercioJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.CompradorJpaRepository;
@@ -37,6 +38,9 @@ class LoginUseCaseTest {
     private static final String PASSWORD_HASH = "hash-almacenado";
 
     @Mock
+    private AdministradorJpaRepository administradorJpaRepository;
+
+    @Mock
     private ComercioJpaRepository comercioJpaRepository;
 
     @Mock
@@ -58,8 +62,8 @@ class LoginUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        useCase = new LoginUseCaseImpl(comercioJpaRepository, beneficiarioJpaRepository, compradorJpaRepository,
-                refreshTokenJpaRepository, jwtService, passwordEncoder, 3600000L, 604800000L);
+        useCase = new LoginUseCaseImpl(administradorJpaRepository, comercioJpaRepository, beneficiarioJpaRepository,
+                compradorJpaRepository, refreshTokenJpaRepository, jwtService, passwordEncoder, 3600000L, 604800000L);
     }
 
     private LoginRequest requestValido() {

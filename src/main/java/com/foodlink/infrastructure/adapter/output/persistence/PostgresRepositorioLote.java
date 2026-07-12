@@ -1,5 +1,6 @@
 package com.foodlink.infrastructure.adapter.output.persistence;
 
+import com.foodlink.application.dto.request.BuscarLotesRequest;
 import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.model.lote.Modalidad;
@@ -8,8 +9,13 @@ import com.foodlink.domain.port.output.IRepositorioLote;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.LoteJpaEntity;
 import com.foodlink.infrastructure.adapter.output.persistence.mapper.LoteMapper;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.LoteJpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,6 +87,75 @@ public class PostgresRepositorioLote implements IRepositorioLote {
                                 latitud, longitud,
                                 entity.getLatitud(), entity.getLongitud(),
                                 radioKm))
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LoteExcedente> buscarReservasExpiradas(LocalDateTime limiteInicio) {
+        return jpaRepository.findReservasExpiradas(limiteInicio)
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LoteExcedente> buscarLotesCaducados() {
+        return jpaRepository.findLotesCaducados(LocalDateTime.now())
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<LoteExcedente> buscarPaginado(BuscarLotesRequest request) {
+        Pageable pageable = PageRequest.of(
+                request.page(),
+                request.size(),
+                Sort.by(Sort.Direction.DESC, "fechaPublicacion"));
+
+        Page<LoteJpaEntity> page;
+
+        if (request.categoria() != null && !request.categoria().isBlank()) {
+            if (request.modalidad() != null) {
+                page = jpaRepository.findByCategoriaAndModalidad(
+                        request.categoria().toUpperCase(),
+                        request.modalidad().toUpperCase(), pageable);
+            } else {
+                page = jpaRepository.findByCategoria(
+                        request.categoria().toUpperCase(), pageable);
+            }
+            return page.map(mapper::toDomain);
+        }
+
+        if (request.q() != null && !request.q().isBlank()) {
+            if (request.modalidad() != null) {
+                page = jpaRepository.buscarPorTextoYModalidad(
+                        request.q(), request.modalidad().toUpperCase(), pageable);
+            } else {
+                page = jpaRepository.buscarPorTexto(request.q(), pageable);
+            }
+        } else if (request.comercioId() != null) {
+            page = jpaRepository.findByComercioId(request.comercioId(), pageable);
+        } else if (request.modalidad() != null) {
+            page = jpaRepository.findByEstadoAndModalidad(
+                    EstadoLote.DISPONIBLE.name(),
+                    request.modalidad().toUpperCase(), pageable);
+        } else if (request.estado() != null) {
+            page = jpaRepository.findByEstado(
+                    request.estado().toUpperCase(), pageable);
+        } else {
+            page = jpaRepository.findByEstado(EstadoLote.DISPONIBLE.name(), pageable);
+        }
+
+        return page.map(mapper::toDomain);
+    }
+
+    @Override
+    public List<LoteExcedente> buscarPorComercioYEstado(UUID comercioId, EstadoLote estado) {
+        return jpaRepository.findByComercioId(comercioId, Pageable.unpaged())
+                .stream()
+                .filter(e -> e.getEstado().equals(estado.name()))
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

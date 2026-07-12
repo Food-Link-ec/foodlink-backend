@@ -18,6 +18,7 @@ public record LoteResponse(
         String descripcion,
         List<String> fotosUrl,
         Double latitud,
-        Double longitud
+        Double longitud,
+        String categoriaProducto
 ) {
 }

@@ -1,11 +1,16 @@
 package com.foodlink.infrastructure.adapter.input.rest.controller;
 
 import com.foodlink.application.dto.request.CancelarReservaRequest;
+import com.foodlink.application.dto.request.ConfirmarDonacionRequest;
+import com.foodlink.application.dto.request.ConfirmarVentaRequest;
 import com.foodlink.application.dto.request.ReservarLoteRequest;
 import com.foodlink.application.dto.response.LoteResponse;
+import com.foodlink.domain.port.input.ConfirmarTransaccionUseCase;
 import com.foodlink.domain.port.input.ReservarLoteUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.CurrentUser;
 import com.foodlink.infrastructure.adapter.input.rest.security.UsuarioAutenticado;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/redistribucion")
+@Tag(name = "Redistribución", description = "Reservas y confirmación de entregas")
 public class RedistribucionController {
 
     private final ReservarLoteUseCase reservarLoteUseCase;
+    private final ConfirmarTransaccionUseCase confirmarTransaccionUseCase;
 
-    public RedistribucionController(ReservarLoteUseCase reservarLoteUseCase) {
+    public RedistribucionController(
+            ReservarLoteUseCase reservarLoteUseCase,
+            ConfirmarTransaccionUseCase confirmarTransaccionUseCase) {
         this.reservarLoteUseCase = reservarLoteUseCase;
+        this.confirmarTransaccionUseCase = confirmarTransaccionUseCase;
     }
 
+    @Operation(summary = "Reservar lote")
     @PostMapping("/reservar")
     public ResponseEntity<LoteResponse> reservar(
             @Valid @RequestBody ReservarLoteRequest request,
@@ -31,10 +42,25 @@ public class RedistribucionController {
                 reservarLoteUseCase.reservar(request, usuario.getUsuarioId()));
     }
 
+    @Operation(summary = "Cancelar reserva")
     @PostMapping("/cancelar")
     public ResponseEntity<LoteResponse> cancelar(
             @Valid @RequestBody CancelarReservaRequest request) {
         return ResponseEntity.ok(
                 reservarLoteUseCase.cancelarReserva(request));
+    }
+
+    @Operation(summary = "Confirmar venta", description = "Lote pasa de RESERVADO a VENDIDO.")
+    @PostMapping("/confirmar-venta")
+    public ResponseEntity<LoteResponse> confirmarVenta(
+            @Valid @RequestBody ConfirmarVentaRequest request) {
+        return ResponseEntity.ok(confirmarTransaccionUseCase.confirmarVenta(request));
+    }
+
+    @Operation(summary = "Confirmar donación", description = "Lote pasa de RESERVADO a DONADO.")
+    @PostMapping("/confirmar-donacion")
+    public ResponseEntity<LoteResponse> confirmarDonacion(
+            @Valid @RequestBody ConfirmarDonacionRequest request) {
+        return ResponseEntity.ok(confirmarTransaccionUseCase.confirmarDonacion(request));
     }
 }

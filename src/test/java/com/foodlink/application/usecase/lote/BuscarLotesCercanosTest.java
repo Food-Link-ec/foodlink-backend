@@ -45,7 +45,7 @@ class BuscarLotesCercanosTest {
         LoteExcedente lote = LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, Modalidad.VENTA,
                 EstadoLote.DISPONIBLE, 10, Dinero.de(new BigDecimal("30"), "USD"),
                 FechaCaducidad.de(LocalDateTime.now().plusDays(3)), LocalDateTime.now(),
-                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null);
+                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null, null);
         lote.asignarUbicacion(latitud, longitud);
         return lote;
     }
@@ -54,7 +54,7 @@ class BuscarLotesCercanosTest {
     void buscarConLatLngRadioDeberiaLlamarBuscarDisponiblesCercanos() {
         when(repositorioLote.buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM)).thenReturn(List.of());
 
-        useCase.buscar(new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM));
+        useCase.buscar(new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM);
         verify(repositorioLote, never()).buscarDisponibles();
@@ -68,7 +68,7 @@ class BuscarLotesCercanosTest {
                 .thenReturn(List.of(loteCercano));
 
         List<LoteResponse> resultado = useCase.buscar(
-                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM));
+                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         assertEquals(1, resultado.size());
         assertEquals(loteCercano.getId(), resultado.get(0).id());
@@ -78,7 +78,7 @@ class BuscarLotesCercanosTest {
     void buscarSinLatLngNoDeberiaLlamarBuscarDisponiblesCercanos() {
         when(repositorioLote.buscarDisponibles()).thenReturn(List.of());
 
-        useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null));
+        useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, never()).buscarDisponiblesCercanos(anyDouble(), anyDouble(), anyDouble());
     }
@@ -89,7 +89,7 @@ class BuscarLotesCercanosTest {
         when(repositorioLote.buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM)).thenReturn(List.of(lote));
 
         List<LoteResponse> resultado = useCase.buscar(
-                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM));
+                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         assertEquals(LATITUD, resultado.get(0).latitud());
         assertEquals(LONGITUD, resultado.get(0).longitud());

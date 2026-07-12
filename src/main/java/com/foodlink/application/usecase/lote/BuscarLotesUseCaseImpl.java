@@ -2,13 +2,18 @@ package com.foodlink.application.usecase.lote;
 
 import com.foodlink.application.dto.request.BuscarLotesRequest;
 import com.foodlink.application.dto.response.LoteResponse;
+import com.foodlink.application.dto.response.PageResponse;
 import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.model.lote.Modalidad;
 import com.foodlink.domain.port.input.BuscarLotesUseCase;
 import com.foodlink.domain.port.output.IRepositorioLote;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,6 +46,12 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
             lotes = repositorioLote.buscarDisponibles();
         }
 
+        if (request.categoria() != null && !request.categoria().isBlank()) {
+            lotes = lotes.stream()
+                    .filter(lote -> request.categoria().equalsIgnoreCase(lote.getCategoria()))
+                    .collect(Collectors.toList());
+        }
+
         return lotes.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
@@ -51,6 +62,42 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
         LoteExcedente lote = repositorioLote.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("Lote no encontrado: " + id));
         return toResponse(lote);
+    }
+
+    @Override
+    public PageResponse<LoteResponse> buscarPaginado(BuscarLotesRequest request) {
+        if (request.latitud() != null && request.longitud() != null && request.radioKm() != null) {
+            List<LoteExcedente> todos = repositorioLote.buscarDisponiblesCercanos(
+                    request.latitud(), request.longitud(), request.radioKm());
+
+            int inicio = request.page() * request.size();
+            int fin = Math.min(inicio + request.size(), todos.size());
+            List<LoteExcedente> subLista = inicio >= todos.size()
+                    ? Collections.emptyList()
+                    : todos.subList(inicio, fin);
+
+            List<LoteResponse> responses = subLista.stream()
+                    .map(this::toResponse)
+                    .collect(Collectors.toList());
+
+            Page<LoteResponse> page = new PageImpl<>(
+                    responses,
+                    PageRequest.of(request.page(), request.size()),
+                    todos.size());
+
+            return PageResponse.de(page);
+        }
+
+        return PageResponse.de(
+                repositorioLote.buscarPaginado(request).map(this::toResponse));
+    }
+
+    @Override
+    public List<LoteResponse> buscarHistorialExpirados(UUID comercioId) {
+        return repositorioLote.buscarPorComercioYEstado(comercioId, EstadoLote.EXPIRADO)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     private LoteResponse toResponse(LoteExcedente lote) {
@@ -68,7 +115,8 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
                 lote.getDescripcion(),
                 lote.getFotosUrl(),
                 lote.getLatitud(),
-                lote.getLongitud()
+                lote.getLongitud(),
+                lote.getCategoria()
         );
     }
 }

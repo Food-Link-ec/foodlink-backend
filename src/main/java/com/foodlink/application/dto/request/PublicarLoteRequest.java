@@ -17,6 +17,7 @@ public record PublicarLoteRequest(
         @NotBlank String descripcion,
         @NotEmpty List<String> fotosUrl,
         Double latitud,
-        Double longitud
+        Double longitud,
+        String categoriaProducto
 ) {
 }

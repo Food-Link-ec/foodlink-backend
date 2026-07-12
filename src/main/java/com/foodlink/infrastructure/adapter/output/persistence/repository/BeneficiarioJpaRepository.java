@@ -17,4 +17,6 @@ public interface BeneficiarioJpaRepository extends JpaRepository<BeneficiarioJpa
     boolean existsByRuc(String ruc);
 
     List<BeneficiarioJpaEntity> findByEstadoVerificacion(EstadoVerificacion estadoVerificacion);
+
+    Long countByEstadoVerificacion(EstadoVerificacion estadoVerificacion);
 }
