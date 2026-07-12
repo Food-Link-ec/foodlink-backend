@@ -16,6 +16,8 @@ public record LoteResponse(
         LocalDateTime fechaCaducidad,
         LocalDateTime fechaPublicacion,
         String descripcion,
-        List<String> fotosUrl
+        List<String> fotosUrl,
+        Double latitud,
+        Double longitud
 ) {
 }
