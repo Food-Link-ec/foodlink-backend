@@ -116,6 +116,18 @@ public class PostgresRepositorioLote implements IRepositorioLote {
 
         Page<LoteJpaEntity> page;
 
+        if (request.categoria() != null && !request.categoria().isBlank()) {
+            if (request.modalidad() != null) {
+                page = jpaRepository.findByCategoriaAndModalidad(
+                        request.categoria().toUpperCase(),
+                        request.modalidad().toUpperCase(), pageable);
+            } else {
+                page = jpaRepository.findByCategoria(
+                        request.categoria().toUpperCase(), pageable);
+            }
+            return page.map(mapper::toDomain);
+        }
+
         if (request.q() != null && !request.q().isBlank()) {
             if (request.modalidad() != null) {
                 page = jpaRepository.buscarPorTextoYModalidad(
