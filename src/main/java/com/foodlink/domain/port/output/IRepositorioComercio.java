@@ -20,4 +20,6 @@ public interface IRepositorioComercio {
     boolean existePorRuc(String ruc);
 
     List<Comercio> buscarPorEstado(EstadoComercio estado);
+
+    List<Comercio> buscarTodos();
 }
