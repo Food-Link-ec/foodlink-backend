@@ -3,6 +3,7 @@ package com.foodlink.infrastructure.adapter.output.persistence.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -36,7 +37,7 @@ public class LoteJpaEntity {
     @Column(nullable = false, length = 30)
     private String estado;
 
-    @Column(name = "cantidad_kg", nullable = false)
+    @Column(name = "cantidad_kg", nullable = false, columnDefinition = "numeric")
     private double cantidadKg;
 
     @Column(name = "precio_monto")
@@ -60,13 +61,22 @@ public class LoteJpaEntity {
     @Column(name = "inicio_reserva")
     private LocalDateTime inicioReserva;
 
+    @Column(columnDefinition = "numeric")
+    private Double latitud;
+
+    @Column(columnDefinition = "numeric")
+    private Double longitud;
+
+    @Column(length = 20)
+    private String categoria;
+
     @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;
 
     @Column(name = "actualizado_en", nullable = false)
     private LocalDateTime actualizadoEn;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "lote_id")
     private List<LoteFotoJpaEntity> fotos = new ArrayList<>();
 }

@@ -5,6 +5,8 @@ import com.foodlink.domain.model.auth.exception.TokenInvalidoException;
 import com.foodlink.domain.model.beneficiario.exception.BeneficiarioInvalidoException;
 import com.foodlink.domain.model.comercio.exception.ComercioInvalidoException;
 import com.foodlink.domain.model.comprador.exception.CompradorInvalidoException;
+import com.foodlink.domain.model.lote.exception.FechaCaducidadInvalidaException;
+import com.foodlink.domain.model.lote.exception.LoteNoDisponibleException;
 import com.foodlink.domain.model.shared.exception.CedulaInvalidaException;
 import com.foodlink.domain.model.shared.exception.EmailInvalidoException;
 import com.foodlink.domain.model.shared.exception.NombreInvalidoException;
@@ -78,6 +80,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> manejarIllegalArgument(IllegalArgumentException ex) {
         return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(LoteNoDisponibleException.class)
+    public ResponseEntity<ApiErrorResponse> manejarLoteNoDisponible(LoteNoDisponibleException ex) {
+        return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(FechaCaducidadInvalidaException.class)
+    public ResponseEntity<ApiErrorResponse> manejarFechaCaducidadInvalida(FechaCaducidadInvalidaException ex) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

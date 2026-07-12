@@ -15,6 +15,9 @@ public record PublicarLoteRequest(
         BigDecimal precioMercado,
         @NotNull LocalDateTime fechaCaducidad,
         @NotBlank String descripcion,
-        @NotEmpty List<String> fotosUrl
+        @NotEmpty List<String> fotosUrl,
+        Double latitud,
+        Double longitud,
+        String categoriaProducto
 ) {
 }

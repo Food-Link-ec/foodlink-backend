@@ -13,4 +13,6 @@ public interface CompradorJpaRepository extends JpaRepository<CompradorJpaEntity
     Optional<CompradorJpaEntity> findByEmail(String email);
 
     boolean existsByCedula(String cedula);
+
+    Long countByActivo(boolean activo);
 }

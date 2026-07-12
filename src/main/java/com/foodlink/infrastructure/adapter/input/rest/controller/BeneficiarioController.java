@@ -3,6 +3,8 @@ package com.foodlink.infrastructure.adapter.input.rest.controller;
 import com.foodlink.application.dto.request.RegistrarBeneficiarioRequest;
 import com.foodlink.application.dto.response.BeneficiarioResponse;
 import com.foodlink.domain.port.input.RegistrarBeneficiarioUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/beneficiarios")
+@Tag(name = "Registro", description = "Registro de nuevos actores en la plataforma")
 public class BeneficiarioController {
 
     private final RegistrarBeneficiarioUseCase registrarBeneficiarioUseCase;
@@ -22,6 +25,7 @@ public class BeneficiarioController {
         this.registrarBeneficiarioUseCase = registrarBeneficiarioUseCase;
     }
 
+    @Operation(summary = "Registrar nuevo beneficiario")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BeneficiarioResponse> registrar(@Valid @RequestBody RegistrarBeneficiarioRequest request) {

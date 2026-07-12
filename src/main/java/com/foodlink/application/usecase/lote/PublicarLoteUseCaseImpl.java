@@ -59,7 +59,11 @@ public class PublicarLoteUseCaseImpl implements PublicarLoteUseCase {
             );
         };
 
+        lote.asignarUbicacion(request.latitud(), request.longitud());
         lote.publicar();
+        if (request.categoriaProducto() != null && !request.categoriaProducto().isBlank()) {
+            lote.asignarCategoria(request.categoriaProducto());
+        }
         LoteExcedente guardado = repositorioLote.guardar(lote);
         lote.pullEventos().forEach(eventPublisher::publishEvent);
         return toResponse(guardado, request.precioMercado());
@@ -77,7 +81,10 @@ public class PublicarLoteUseCaseImpl implements PublicarLoteUseCase {
                 lote.getFechaCaducidad().getValor(),
                 lote.getFechaPublicacion(),
                 lote.getDescripcion(),
-                lote.getFotosUrl()
+                lote.getFotosUrl(),
+                lote.getLatitud(),
+                lote.getLongitud(),
+                lote.getCategoria()
         );
     }
 }

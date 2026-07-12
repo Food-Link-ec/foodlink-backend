@@ -47,17 +47,17 @@ class PublicarLoteUseCaseTest {
 
     private PublicarLoteRequest requestVenta() {
         return new PublicarLoteRequest("VENTA", 10.0, new BigDecimal("30"), new BigDecimal("100"),
-                LocalDateTime.now().plusDays(3), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"));
+                LocalDateTime.now().plusDays(3), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null);
     }
 
     private PublicarLoteRequest requestDonacion() {
         return new PublicarLoteRequest("DONACION", 10.0, null, null,
-                LocalDateTime.now().plusDays(3), "Pan del día", List.of("https://foto.com/1.jpg"));
+                LocalDateTime.now().plusDays(3), "Pan del día", List.of("https://foto.com/1.jpg"), null, null, null);
     }
 
     private PublicarLoteRequest requestRetiroDirecto() {
         return new PublicarLoteRequest("RETIRO_DIRECTO", 10.0, null, null,
-                LocalDateTime.now().plusDays(3), "Verduras variadas", List.of("https://foto.com/1.jpg"));
+                LocalDateTime.now().plusDays(3), "Verduras variadas", List.of("https://foto.com/1.jpg"), null, null, null);
     }
 
     @Test
@@ -111,7 +111,7 @@ class PublicarLoteUseCaseTest {
     void publicarConPrecioMayorAlCuarentaPorCientoDelMercadoDeberiaLanzarExcepcion() {
         PublicarLoteRequest request = new PublicarLoteRequest("VENTA", 10.0, new BigDecimal("50"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), "Frutas y verduras frescas",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null, null);
 
         assertThrows(IllegalArgumentException.class, () -> useCase.publicar(request, COMERCIO_ID));
     }
@@ -120,7 +120,7 @@ class PublicarLoteUseCaseTest {
     void publicarConCantidadKgCeroDeberiaLanzarIllegalArgumentException() {
         PublicarLoteRequest request = new PublicarLoteRequest("VENTA", 0, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), "Frutas y verduras frescas",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null, null);
 
         assertThrows(IllegalArgumentException.class, () -> useCase.publicar(request, COMERCIO_ID));
     }
@@ -129,7 +129,7 @@ class PublicarLoteUseCaseTest {
     void publicarConCantidadKgNegativaDeberiaLanzarIllegalArgumentException() {
         PublicarLoteRequest request = new PublicarLoteRequest("VENTA", -5, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), "Frutas y verduras frescas",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null, null);
 
         assertThrows(IllegalArgumentException.class, () -> useCase.publicar(request, COMERCIO_ID));
     }
@@ -138,7 +138,7 @@ class PublicarLoteUseCaseTest {
     void publicarConFechaCaducidadEnElPasadoDeberiaLanzarExcepcion() {
         PublicarLoteRequest request = new PublicarLoteRequest("VENTA", 10.0, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().minusDays(1), "Frutas y verduras frescas",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null, null);
 
         assertThrows(FechaCaducidadInvalidaException.class, () -> useCase.publicar(request, COMERCIO_ID));
     }
