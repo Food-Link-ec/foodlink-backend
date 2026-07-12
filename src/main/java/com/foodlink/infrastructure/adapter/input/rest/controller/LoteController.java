@@ -3,6 +3,7 @@ package com.foodlink.infrastructure.adapter.input.rest.controller;
 import com.foodlink.application.dto.request.BuscarLotesRequest;
 import com.foodlink.application.dto.request.PublicarLoteRequest;
 import com.foodlink.application.dto.response.LoteResponse;
+import com.foodlink.application.dto.response.PageResponse;
 import com.foodlink.domain.port.input.BuscarLotesUseCase;
 import com.foodlink.domain.port.input.PublicarLoteUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.CurrentUser;
@@ -55,12 +56,33 @@ public class LoteController {
             @RequestParam(required = false) Double longitud,
             @RequestParam(required = false) Double radioKm) {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                modalidad, estado, comercioId, latitud, longitud, radioKm);
+                modalidad, estado, comercioId, latitud, longitud, radioKm, null, 0, 10);
         return ResponseEntity.ok(buscarLotesUseCase.buscar(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LoteResponse> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(buscarLotesUseCase.buscarPorId(id));
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<PageResponse<LoteResponse>> buscarPaginado(
+            @RequestParam(required = false) String modalidad,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) UUID comercioId,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng,
+            @RequestParam(required = false) Double radioKm,
+            @RequestParam(required = false) String q,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        BuscarLotesRequest request = new BuscarLotesRequest(
+                modalidad, estado, comercioId, lat, lng, radioKm, q, page, size);
+        return ResponseEntity.ok(buscarLotesUseCase.buscarPaginado(request));
+    }
+
+    @GetMapping("/historial-expirados")
+    public ResponseEntity<List<LoteResponse>> historialExpirados(@CurrentUser UsuarioAutenticado usuario) {
+        return ResponseEntity.ok(buscarLotesUseCase.buscarHistorialExpirados(usuario.getUsuarioId()));
     }
 }
