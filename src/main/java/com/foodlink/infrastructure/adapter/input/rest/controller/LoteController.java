@@ -8,6 +8,8 @@ import com.foodlink.domain.port.input.BuscarLotesUseCase;
 import com.foodlink.domain.port.input.PublicarLoteUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.CurrentUser;
 import com.foodlink.infrastructure.adapter.input.rest.security.UsuarioAutenticado;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/lotes")
+@Tag(name = "Lotes", description = "Publicación y búsqueda de lotes de excedentes")
 public class LoteController {
 
     private final PublicarLoteUseCase publicarLoteUseCase;
@@ -37,6 +40,7 @@ public class LoteController {
         this.buscarLotesUseCase = buscarLotesUseCase;
     }
 
+    @Operation(summary = "Publicar lote", description = "Requiere ROLE_COMERCIO o ROLE_ADMIN. Acepta categoriaProducto sugerida por IA.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<LoteResponse> publicar(
@@ -47,6 +51,7 @@ public class LoteController {
                 .body(publicarLoteUseCase.publicar(request, usuario.getUsuarioId()));
     }
 
+    @Operation(summary = "Listar lotes disponibles", description = "Endpoint público. Filtros: modalidad, estado, comercioId, lat, lng, radioKm.")
     @GetMapping
     public ResponseEntity<List<LoteResponse>> buscar(
             @RequestParam(required = false) String modalidad,
@@ -60,11 +65,13 @@ public class LoteController {
         return ResponseEntity.ok(buscarLotesUseCase.buscar(request));
     }
 
+    @Operation(summary = "Detalle de lote")
     @GetMapping("/{id}")
     public ResponseEntity<LoteResponse> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(buscarLotesUseCase.buscarPorId(id));
     }
 
+    @Operation(summary = "Buscar lotes paginado", description = "Búsqueda por texto (q=), modalidad, proximidad. Retorna PageResponse.")
     @GetMapping("/buscar")
     public ResponseEntity<PageResponse<LoteResponse>> buscarPaginado(
             @RequestParam(required = false) String modalidad,
@@ -81,6 +88,7 @@ public class LoteController {
         return ResponseEntity.ok(buscarLotesUseCase.buscarPaginado(request));
     }
 
+    @Operation(summary = "Historial de lotes expirados del comercio autenticado")
     @GetMapping("/historial-expirados")
     public ResponseEntity<List<LoteResponse>> historialExpirados(@CurrentUser UsuarioAutenticado usuario) {
         return ResponseEntity.ok(buscarLotesUseCase.buscarHistorialExpirados(usuario.getUsuarioId()));
