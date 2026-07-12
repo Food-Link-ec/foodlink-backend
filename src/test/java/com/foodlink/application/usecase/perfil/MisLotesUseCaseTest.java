@@ -45,7 +45,7 @@ class MisLotesUseCaseTest {
         UUID comercioId = UUID.randomUUID();
         when(repositorioLote.buscarPorComercio(comercioId)).thenReturn(List.of());
 
-        useCase.obtenerMisLotes(comercioId);
+        useCase.obtenerMisLotes(comercioId, null);
 
         verify(repositorioLote, times(1)).buscarPorComercio(comercioId);
     }
@@ -57,7 +57,7 @@ class MisLotesUseCaseTest {
         LoteExcedente loteEntregado = loteEnEstado(comercioId, EstadoLote.ENTREGADO, null);
         when(repositorioLote.buscarPorComercio(comercioId)).thenReturn(List.of(loteDisponible, loteEntregado));
 
-        List<LoteResponse> resultado = useCase.obtenerMisLotes(comercioId);
+        List<LoteResponse> resultado = useCase.obtenerMisLotes(comercioId, null);
 
         assertEquals(2, resultado.size());
     }
@@ -67,9 +67,39 @@ class MisLotesUseCaseTest {
         UUID comercioId = UUID.randomUUID();
         when(repositorioLote.buscarPorComercio(comercioId)).thenReturn(List.of());
 
-        List<LoteResponse> resultado = useCase.obtenerMisLotes(comercioId);
+        List<LoteResponse> resultado = useCase.obtenerMisLotes(comercioId, null);
 
         assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void obtenerMisLotesConEstadoDisponibleDeberiaLlamarBuscarPorComercioYEstadoDisponible() {
+        UUID comercioId = UUID.randomUUID();
+        when(repositorioLote.buscarPorComercioYEstado(comercioId, EstadoLote.DISPONIBLE)).thenReturn(List.of());
+
+        useCase.obtenerMisLotes(comercioId, "DISPONIBLE");
+
+        verify(repositorioLote, times(1)).buscarPorComercioYEstado(comercioId, EstadoLote.DISPONIBLE);
+    }
+
+    @Test
+    void obtenerMisLotesConEstadoNuloDeberiaLlamarBuscarPorComercio() {
+        UUID comercioId = UUID.randomUUID();
+        when(repositorioLote.buscarPorComercio(comercioId)).thenReturn(List.of());
+
+        useCase.obtenerMisLotes(comercioId, null);
+
+        verify(repositorioLote, times(1)).buscarPorComercio(comercioId);
+    }
+
+    @Test
+    void obtenerMisLotesConEstadoEntregadoDeberiaLlamarBuscarPorComercioYEstadoEntregado() {
+        UUID comercioId = UUID.randomUUID();
+        when(repositorioLote.buscarPorComercioYEstado(comercioId, EstadoLote.ENTREGADO)).thenReturn(List.of());
+
+        useCase.obtenerMisLotes(comercioId, "ENTREGADO");
+
+        verify(repositorioLote, times(1)).buscarPorComercioYEstado(comercioId, EstadoLote.ENTREGADO);
     }
 
     @Test

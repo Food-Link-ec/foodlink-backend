@@ -65,7 +65,7 @@ class PerfilControllerTest {
 
     @Test
     void misLotesAutenticadoDeberiaRetornar200() throws Exception {
-        when(misLotesUseCase.obtenerMisLotes(any())).thenReturn(List.of());
+        when(misLotesUseCase.obtenerMisLotes(any(), any())).thenReturn(List.of());
 
         mockMvc.perform(get("/api/v1/comercios/mis-lotes")
                         .with(authentication(usuarioAutenticado())))
