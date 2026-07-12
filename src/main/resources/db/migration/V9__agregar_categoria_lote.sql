@@ -1,0 +1,2 @@
+ALTER TABLE lotes_excedentes
+ADD COLUMN IF NOT EXISTS categoria VARCHAR(20);
