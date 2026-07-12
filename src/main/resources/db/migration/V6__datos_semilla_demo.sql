@@ -67,7 +67,7 @@ INSERT INTO comercios (
     '$2a$12$Tnw7OFP0f/gmE8pAyUxbJ.avWXSl7sArAPwg27hiHjFSujRO97zcu',
     true,
     NOW() - INTERVAL '2 days'
-);
+) ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- BENEFICIARIOS (2 organizaciones)
@@ -106,7 +106,7 @@ INSERT INTO beneficiarios (
     '$2a$12$Tnw7OFP0f/gmE8pAyUxbJ.avWXSl7sArAPwg27hiHjFSujRO97zcu',
     true,
     NOW() - INTERVAL '1 days'
-);
+) ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- COMPRADORES (2 personas naturales)
@@ -137,7 +137,7 @@ INSERT INTO compradores (
     true,
     '$2a$12$Tnw7OFP0f/gmE8pAyUxbJ.avWXSl7sArAPwg27hiHjFSujRO97zcu',
     NOW() - INTERVAL '10 days'
-);
+) ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- LOTES DE EXCEDENTES (5 lotes en diferentes estados)
@@ -206,7 +206,7 @@ INSERT INTO lotes_excedentes (
     'Galletas artesanales y bizcochos surtidos.',
     NULL, NULL,
     NOW() - INTERVAL '2 days', NOW() - INTERVAL '1 days'
-);
+) ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- FOTOS DE LOTES
@@ -217,7 +217,7 @@ INSERT INTO lote_fotos (lote_id, url) VALUES
 ('d1b2c3d4-e5f6-7890-abcd-ef1234567802', 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=400'),
 ('d1b2c3d4-e5f6-7890-abcd-ef1234567803', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400'),
 ('d1b2c3d4-e5f6-7890-abcd-ef1234567804', 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400'),
-('d1b2c3d4-e5f6-7890-abcd-ef1234567805', 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400');
+('d1b2c3d4-e5f6-7890-abcd-ef1234567805', 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400') ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- MÉTRICAS DE IMPACTO (lote entregado + histórico)
@@ -247,7 +247,7 @@ INSERT INTO impacto_metricas (
 (
     uuid_generate_v4(), 45.0, 112.5, 90,
     NOW() - INTERVAL '20 days'
-);
+) ON CONFLICT DO NOTHING;
 
 -- ══════════════════════════════════════════════════════════
 -- VERIFICACIÓN FINAL
