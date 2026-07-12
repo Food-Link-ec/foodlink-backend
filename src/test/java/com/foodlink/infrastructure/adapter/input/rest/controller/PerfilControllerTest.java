@@ -5,6 +5,7 @@ import com.foodlink.domain.port.input.MiPerfilUseCase;
 import com.foodlink.domain.port.input.MisLotesUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.JwtService;
 import com.foodlink.infrastructure.adapter.input.rest.security.UsuarioAutenticado;
+import com.foodlink.infrastructure.adapter.output.persistence.CompradorStatsService;
 import com.foodlink.infrastructure.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ class PerfilControllerTest {
 
     @MockBean
     private JwtService jwtService;
+
+    @MockBean
+    private CompradorStatsService compradorStatsService;
 
     private UsuarioAutenticado usuarioAutenticado() {
         return UsuarioAutenticado.of(UUID.randomUUID(), "comercio@test.com", "ROLE_COMERCIO", "COMERCIO");
