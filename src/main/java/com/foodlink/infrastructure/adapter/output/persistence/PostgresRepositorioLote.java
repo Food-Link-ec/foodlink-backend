@@ -3,6 +3,7 @@ package com.foodlink.infrastructure.adapter.output.persistence;
 import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.model.lote.Modalidad;
+import com.foodlink.domain.model.shared.CalculadorDistancia;
 import com.foodlink.domain.port.output.IRepositorioLote;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.LoteJpaEntity;
 import com.foodlink.infrastructure.adapter.output.persistence.mapper.LoteMapper;
@@ -65,6 +66,22 @@ public class PostgresRepositorioLote implements IRepositorioLote {
         return jpaRepository
                 .findByEstadoAndModalidad(EstadoLote.DISPONIBLE.name(), modalidad.name())
                 .stream().map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LoteExcedente> buscarDisponiblesCercanos(double latitud, double longitud, double radioKm) {
+        return jpaRepository
+                .findByEstado(EstadoLote.DISPONIBLE.name())
+                .stream()
+                .filter(entity ->
+                        entity.getLatitud() != null &&
+                        entity.getLongitud() != null &&
+                        CalculadorDistancia.estaDentroDeRadio(
+                                latitud, longitud,
+                                entity.getLatitud(), entity.getLongitud(),
+                                radioKm))
+                .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
 }
