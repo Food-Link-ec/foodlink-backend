@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // <-- ¡Permitir preflight OPTIONS libre!
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/auth/logout").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/lotes/historial-expirados").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/lotes/buscar").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/lotes", "/api/v1/lotes/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/actuator/health", "/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/comercios", "/api/v1/beneficiarios", "/api/v1/compradores").permitAll()
