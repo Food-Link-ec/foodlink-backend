@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/auth/me").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/comercios/mis-lotes").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/redistribucion/mis-reservas").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/ia/**").hasAnyRole("COMERCIO", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
