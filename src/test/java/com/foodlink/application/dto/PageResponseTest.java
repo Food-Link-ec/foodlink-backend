@@ -35,7 +35,7 @@ class PageResponseTest {
     @Test
     void buscarLotesRequestConSizeCeroDeberiaNormalizarADiez() {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                null, null, null, null, null, null, null, 0, 0);
+                null, null, null, null, null, null, null, null, 0, 0);
 
         assertEquals(10, request.size());
     }
@@ -43,7 +43,7 @@ class PageResponseTest {
     @Test
     void buscarLotesRequestConSizeMayorACincuentaDeberiaNormalizarADiez() {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                null, null, null, null, null, null, null, 0, 100);
+                null, null, null, null, null, null, null, null, 0, 100);
 
         assertEquals(10, request.size());
     }
@@ -51,7 +51,7 @@ class PageResponseTest {
     @Test
     void buscarLotesRequestConPageMenosUnoDeberiaNormalizarACero() {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                null, null, null, null, null, null, null, -1, 10);
+                null, null, null, null, null, null, null, null, -1, 10);
 
         assertEquals(0, request.page());
     }

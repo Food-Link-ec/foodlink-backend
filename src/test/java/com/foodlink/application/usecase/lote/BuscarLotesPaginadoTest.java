@@ -50,7 +50,7 @@ class BuscarLotesPaginadoTest {
     }
 
     private BuscarLotesRequest requestSinFiltros() {
-        return new BuscarLotesRequest(null, null, null, null, null, null, null, 0, 10);
+        return new BuscarLotesRequest(null, null, null, null, null, null, null, null, 0, 10);
     }
 
     @Test
@@ -65,7 +65,7 @@ class BuscarLotesPaginadoTest {
 
     @Test
     void buscarPaginadoConTextoDeberiaDelegarEnRepositorioConElMismoRequest() {
-        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, "pan", 0, 10);
+        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, "pan", null, 0, 10);
         Page<LoteExcedente> page = new PageImpl<>(List.of(loteVenta()), PageRequest.of(0, 10), 1);
         when(repositorioLote.buscarPaginado(any())).thenReturn(page);
 
@@ -79,7 +79,7 @@ class BuscarLotesPaginadoTest {
     @Test
     void buscarPaginadoConLatLngRadioDeberiaUsarBuscarDisponiblesCercanosConPaginacionManual() {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                null, null, null, -0.18, -78.46, 5.0, null, 0, 10);
+                null, null, null, -0.18, -78.46, 5.0, null, null, 0, 10);
         when(repositorioLote.buscarDisponiblesCercanos(-0.18, -78.46, 5.0))
                 .thenReturn(List.of(loteVenta()));
 
@@ -102,7 +102,7 @@ class BuscarLotesPaginadoTest {
 
     @Test
     void buscarPaginadoConPageCeroSizeDiezDeberiaRespetarPaginacion() {
-        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, null, 0, 10);
+        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, null, null, 0, 10);
         Page<LoteExcedente> page = new PageImpl<>(List.of(loteVenta()), PageRequest.of(0, 10), 1);
         when(repositorioLote.buscarPaginado(any())).thenReturn(page);
 
@@ -110,6 +110,47 @@ class BuscarLotesPaginadoTest {
 
         assertEquals(10, resultado.tamanioPagina());
         assertEquals(1, resultado.contenido().size());
+    }
+
+    @Test
+    void buscarPaginadoConCategoriaDeberiaDelegarCategoriaAlRepositorio() {
+        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, null, "PANADERIA", 0, 10);
+        Page<LoteExcedente> page = new PageImpl<>(List.of(loteVenta()), PageRequest.of(0, 10), 1);
+        when(repositorioLote.buscarPaginado(any())).thenReturn(page);
+
+        useCase.buscarPaginado(request);
+
+        ArgumentCaptor<BuscarLotesRequest> captor = ArgumentCaptor.forClass(BuscarLotesRequest.class);
+        verify(repositorioLote).buscarPaginado(captor.capture());
+        assertEquals("PANADERIA", captor.getValue().categoria());
+    }
+
+    @Test
+    void buscarPaginadoConCategoriaYModalidadDeberiaDelegarAmbosAlRepositorio() {
+        BuscarLotesRequest request = new BuscarLotesRequest("VENTA", null, null, null, null, null, null, "PANADERIA", 0, 10);
+        Page<LoteExcedente> page = new PageImpl<>(List.of(loteVenta()), PageRequest.of(0, 10), 1);
+        when(repositorioLote.buscarPaginado(any())).thenReturn(page);
+
+        useCase.buscarPaginado(request);
+
+        ArgumentCaptor<BuscarLotesRequest> captor = ArgumentCaptor.forClass(BuscarLotesRequest.class);
+        verify(repositorioLote).buscarPaginado(captor.capture());
+        assertEquals("PANADERIA", captor.getValue().categoria());
+        assertEquals("VENTA", captor.getValue().modalidad());
+    }
+
+    @Test
+    void buscarPaginadoConCategoriaSinModalidadDeberiaFiltrarSoloPorCategoria() {
+        BuscarLotesRequest request = new BuscarLotesRequest(null, null, null, null, null, null, null, "LACTEOS", 0, 10);
+        Page<LoteExcedente> page = new PageImpl<>(List.of(loteVenta()), PageRequest.of(0, 10), 1);
+        when(repositorioLote.buscarPaginado(any())).thenReturn(page);
+
+        useCase.buscarPaginado(request);
+
+        ArgumentCaptor<BuscarLotesRequest> captor = ArgumentCaptor.forClass(BuscarLotesRequest.class);
+        verify(repositorioLote).buscarPaginado(captor.capture());
+        assertEquals("LACTEOS", captor.getValue().categoria());
+        assertEquals(null, captor.getValue().modalidad());
     }
 
     @Test

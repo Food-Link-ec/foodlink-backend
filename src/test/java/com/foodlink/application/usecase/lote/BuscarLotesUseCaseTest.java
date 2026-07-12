@@ -59,7 +59,7 @@ class BuscarLotesUseCaseTest {
     void buscarSinFiltrosDeberiaLlamarBuscarDisponiblesYRetornarLista() {
         when(repositorioLote.buscarDisponibles()).thenReturn(List.of(loteVenta()));
 
-        List<LoteResponse> resultado = useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null, null, 0, 10));
+        List<LoteResponse> resultado = useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarDisponibles();
         assertEquals(1, resultado.size());
@@ -69,7 +69,7 @@ class BuscarLotesUseCaseTest {
     void buscarConModalidadDonacionDeberiaLlamarBuscarDisponiblesPorModalidadDonacion() {
         when(repositorioLote.buscarDisponiblesPorModalidad(Modalidad.DONACION)).thenReturn(List.of(loteDonacion()));
 
-        useCase.buscar(new BuscarLotesRequest("DONACION", null, null, null, null, null, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest("DONACION", null, null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarDisponiblesPorModalidad(Modalidad.DONACION);
     }
@@ -78,7 +78,7 @@ class BuscarLotesUseCaseTest {
     void buscarConModalidadVentaDeberiaLlamarBuscarDisponiblesPorModalidadVenta() {
         when(repositorioLote.buscarDisponiblesPorModalidad(Modalidad.VENTA)).thenReturn(List.of(loteVenta()));
 
-        useCase.buscar(new BuscarLotesRequest("VENTA", null, null, null, null, null, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest("VENTA", null, null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarDisponiblesPorModalidad(Modalidad.VENTA);
     }
@@ -87,7 +87,7 @@ class BuscarLotesUseCaseTest {
     void buscarConComercioIdDeberiaLlamarBuscarPorComercio() {
         when(repositorioLote.buscarPorComercio(COMERCIO_ID)).thenReturn(List.of(loteVenta()));
 
-        useCase.buscar(new BuscarLotesRequest(null, null, COMERCIO_ID, null, null, null, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest(null, null, COMERCIO_ID, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarPorComercio(COMERCIO_ID);
     }
@@ -96,7 +96,7 @@ class BuscarLotesUseCaseTest {
     void buscarConEstadoExpiradoDeberiaLlamarBuscarPorEstadoExpirado() {
         when(repositorioLote.buscarPorEstado(EstadoLote.EXPIRADO)).thenReturn(List.of());
 
-        useCase.buscar(new BuscarLotesRequest(null, "EXPIRADO", null, null, null, null, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest(null, "EXPIRADO", null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarPorEstado(EstadoLote.EXPIRADO);
     }

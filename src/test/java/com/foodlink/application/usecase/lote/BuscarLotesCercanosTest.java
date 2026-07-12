@@ -54,7 +54,7 @@ class BuscarLotesCercanosTest {
     void buscarConLatLngRadioDeberiaLlamarBuscarDisponiblesCercanos() {
         when(repositorioLote.buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM)).thenReturn(List.of());
 
-        useCase.buscar(new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         verify(repositorioLote, times(1)).buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM);
         verify(repositorioLote, never()).buscarDisponibles();
@@ -68,7 +68,7 @@ class BuscarLotesCercanosTest {
                 .thenReturn(List.of(loteCercano));
 
         List<LoteResponse> resultado = useCase.buscar(
-                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, 0, 10));
+                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         assertEquals(1, resultado.size());
         assertEquals(loteCercano.getId(), resultado.get(0).id());
@@ -78,7 +78,7 @@ class BuscarLotesCercanosTest {
     void buscarSinLatLngNoDeberiaLlamarBuscarDisponiblesCercanos() {
         when(repositorioLote.buscarDisponibles()).thenReturn(List.of());
 
-        useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null, null, 0, 10));
+        useCase.buscar(new BuscarLotesRequest(null, null, null, null, null, null, null, null, 0, 10));
 
         verify(repositorioLote, never()).buscarDisponiblesCercanos(anyDouble(), anyDouble(), anyDouble());
     }
@@ -89,7 +89,7 @@ class BuscarLotesCercanosTest {
         when(repositorioLote.buscarDisponiblesCercanos(LATITUD, LONGITUD, RADIO_KM)).thenReturn(List.of(lote));
 
         List<LoteResponse> resultado = useCase.buscar(
-                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, 0, 10));
+                new BuscarLotesRequest(null, null, null, LATITUD, LONGITUD, RADIO_KM, null, null, 0, 10));
 
         assertEquals(LATITUD, resultado.get(0).latitud());
         assertEquals(LONGITUD, resultado.get(0).longitud());
