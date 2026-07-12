@@ -1,11 +1,13 @@
 package com.foodlink.infrastructure.adapter.output.persistence;
 
 import com.foodlink.domain.model.beneficiario.Beneficiario;
+import com.foodlink.domain.model.beneficiario.EstadoVerificacion;
 import com.foodlink.domain.port.output.IRepositorioBeneficiario;
 import com.foodlink.infrastructure.adapter.output.persistence.mapper.BeneficiarioMapper;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.BeneficiarioJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,5 +50,19 @@ public class PostgresRepositorioBeneficiario implements IRepositorioBeneficiario
     @Override
     public boolean existePorRuc(String ruc) {
         return beneficiarioJpaRepository.existsByRuc(ruc);
+    }
+
+    @Override
+    public List<Beneficiario> buscarPorEstado(EstadoVerificacion estado) {
+        return beneficiarioJpaRepository.findByEstadoVerificacion(estado).stream()
+                .map(beneficiarioMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Beneficiario> buscarTodos() {
+        return beneficiarioJpaRepository.findAll().stream()
+                .map(beneficiarioMapper::toDomain)
+                .toList();
     }
 }
