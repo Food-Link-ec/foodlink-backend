@@ -5,6 +5,9 @@ import java.util.UUID;
 public record BuscarLotesRequest(
         String modalidad,
         String estado,
-        UUID comercioId
+        UUID comercioId,
+        Double latitud,
+        Double longitud,
+        Double radioKm
 ) {
 }
