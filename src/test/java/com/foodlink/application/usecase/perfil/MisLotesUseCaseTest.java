@@ -37,7 +37,7 @@ class MisLotesUseCaseTest {
         return LoteExcedente.reconstituir(UUID.randomUUID(), comercioId, Modalidad.VENTA, estado, 10,
                 Dinero.de(new BigDecimal("30"), "USD"), FechaCaducidad.de(LocalDateTime.now().plusDays(3)),
                 LocalDateTime.now(), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"),
-                beneficiarioReservaId, LocalDateTime.now(), null, null);
+                beneficiarioReservaId, LocalDateTime.now(), null, null, null);
     }
 
     @Test

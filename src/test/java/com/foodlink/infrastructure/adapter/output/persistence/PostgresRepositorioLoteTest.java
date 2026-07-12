@@ -103,7 +103,7 @@ class PostgresRepositorioLoteTest {
         LoteExcedente loteExpirado = LoteExcedente.reconstituir(
                 UUID.randomUUID(), UUID.randomUUID(), Modalidad.DONACION, EstadoLote.EXPIRADO, 5.0,
                 Dinero.cero(), FechaCaducidad.de(LocalDateTime.now().plusDays(1)), null,
-                "Pan integral de prueba", List.of("https://ejemplo.com/foto.jpg"), null, null, null, null);
+                "Pan integral de prueba", List.of("https://ejemplo.com/foto.jpg"), null, null, null, null, null);
         repositorio.guardar(loteExpirado);
         repositorio.guardar(loteDeDonacion(UUID.randomUUID()));
 

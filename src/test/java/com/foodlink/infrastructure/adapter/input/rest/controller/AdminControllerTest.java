@@ -6,6 +6,7 @@ import com.foodlink.domain.port.input.AdministrarBeneficiarioUseCase;
 import com.foodlink.domain.port.input.AdministrarComercioUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.JwtService;
 import com.foodlink.infrastructure.adapter.input.rest.security.UsuarioAutenticado;
+import com.foodlink.infrastructure.adapter.output.persistence.AnalyticsService;
 import com.foodlink.infrastructure.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ class AdminControllerTest {
 
     @MockBean
     private JwtService jwtService;
+
+    @MockBean
+    private AnalyticsService analyticsService;
 
     private UsuarioAutenticado usuarioAdmin() {
         return UsuarioAutenticado.of(UUID.randomUUID(), "admin@foodlink.ec", "ROLE_ADMIN", "ADMIN");

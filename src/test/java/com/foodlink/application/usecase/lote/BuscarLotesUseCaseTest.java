@@ -46,13 +46,13 @@ class BuscarLotesUseCaseTest {
     private LoteExcedente loteVenta() {
         return LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, Modalidad.VENTA, EstadoLote.DISPONIBLE,
                 10, Dinero.de(new BigDecimal("30"), "USD"), fechaCaducidadValida(), LocalDateTime.now(),
-                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null);
+                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null, null);
     }
 
     private LoteExcedente loteDonacion() {
         return LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, Modalidad.DONACION, EstadoLote.DISPONIBLE,
                 10, Dinero.cero(), fechaCaducidadValida(), LocalDateTime.now(),
-                "Pan del día", List.of("https://foto.com/1.jpg"), null, null, null, null);
+                "Pan del día", List.of("https://foto.com/1.jpg"), null, null, null, null, null);
     }
 
     @Test
