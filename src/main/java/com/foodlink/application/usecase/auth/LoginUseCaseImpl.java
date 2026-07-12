@@ -6,6 +6,7 @@ import com.foodlink.domain.model.auth.exception.TokenInvalidoException;
 import com.foodlink.domain.port.input.LoginUseCase;
 import com.foodlink.infrastructure.adapter.input.rest.security.JwtService;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.RefreshTokenJpaEntity;
+import com.foodlink.infrastructure.adapter.output.persistence.repository.AdministradorJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.BeneficiarioJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.ComercioJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.CompradorJpaRepository;
@@ -30,6 +31,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
     private static final String CREDENCIALES_INVALIDAS = "Credenciales inválidas";
     private static final String TOKEN_INVALIDO = "Token inválido o expirado";
 
+    private final AdministradorJpaRepository administradorJpaRepository;
     private final ComercioJpaRepository comercioJpaRepository;
     private final BeneficiarioJpaRepository beneficiarioJpaRepository;
     private final CompradorJpaRepository compradorJpaRepository;
@@ -39,7 +41,8 @@ public class LoginUseCaseImpl implements LoginUseCase {
     private final long expirationMs;
     private final long refreshExpirationMs;
 
-    public LoginUseCaseImpl(ComercioJpaRepository comercioJpaRepository,
+    public LoginUseCaseImpl(AdministradorJpaRepository administradorJpaRepository,
+                             ComercioJpaRepository comercioJpaRepository,
                              BeneficiarioJpaRepository beneficiarioJpaRepository,
                              CompradorJpaRepository compradorJpaRepository,
                              RefreshTokenJpaRepository refreshTokenJpaRepository,
@@ -47,6 +50,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
                              PasswordEncoder passwordEncoder,
                              @Value("${jwt.expiration-ms}") long expirationMs,
                              @Value("${jwt.refresh-expiration-ms}") long refreshExpirationMs) {
+        this.administradorJpaRepository = administradorJpaRepository;
         this.comercioJpaRepository = comercioJpaRepository;
         this.beneficiarioJpaRepository = beneficiarioJpaRepository;
         this.compradorJpaRepository = compradorJpaRepository;
@@ -120,6 +124,13 @@ public class LoginUseCaseImpl implements LoginUseCase {
     }
 
     private Optional<Credenciales> buscarCredencialesPorEmail(String email) {
+        Optional<Credenciales> administrador = administradorJpaRepository.findByEmail(email)
+                .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
+                        "ROLE_ADMIN", "ADMIN", entity.getNombre()));
+        if (administrador.isPresent()) {
+            return administrador;
+        }
+
         Optional<Credenciales> comercio = comercioJpaRepository.findByEmail(email)
                 .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
                         "ROLE_COMERCIO", "COMERCIO", entity.getNombre()));
@@ -141,6 +152,9 @@ public class LoginUseCaseImpl implements LoginUseCase {
 
     private Optional<Credenciales> buscarCredencialesPorId(UUID usuarioId, String tipoUsuario) {
         return switch (tipoUsuario) {
+            case "ADMIN" -> administradorJpaRepository.findById(usuarioId)
+                    .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
+                            "ROLE_ADMIN", "ADMIN", entity.getNombre()));
             case "COMERCIO" -> comercioJpaRepository.findById(usuarioId)
                     .map(entity -> new Credenciales(entity.getId(), entity.getEmail(), entity.getPasswordHash(),
                             "ROLE_COMERCIO", "COMERCIO", entity.getNombre()));
