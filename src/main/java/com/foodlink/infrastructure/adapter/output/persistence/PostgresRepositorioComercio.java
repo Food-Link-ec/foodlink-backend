@@ -58,4 +58,11 @@ public class PostgresRepositorioComercio implements IRepositorioComercio {
                 .map(comercioMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public List<Comercio> buscarTodos() {
+        return comercioJpaRepository.findAll().stream()
+                .map(comercioMapper::toDomain)
+                .toList();
+    }
 }
