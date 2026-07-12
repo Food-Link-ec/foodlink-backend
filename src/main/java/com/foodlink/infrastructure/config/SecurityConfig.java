@@ -32,13 +32,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // <-- ¡Permitir preflight OPTIONS libre!
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/lotes", "/api/v1/lotes/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/actuator/health", "/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/comercios", "/api/v1/beneficiarios", "/api/v1/compradores").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/lotes").hasAnyRole("COMERCIO", "ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/retiros/**").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/redistribucion/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
