@@ -30,12 +30,14 @@ public class LoteExcedente {
     private final List<String> fotosUrl;
     private UUID beneficiarioReservaId;
     private LocalDateTime inicioReserva;
+    private Double latitud;
+    private Double longitud;
     private final List<Object> eventos;
 
     private LoteExcedente(UUID id, UUID comercioId, Modalidad modalidad, EstadoLote estado, double cantidadKg,
                            Dinero precio, FechaCaducidad fechaCaducidad, LocalDateTime fechaPublicacion,
                            String descripcion, List<String> fotosUrl, UUID beneficiarioReservaId,
-                           LocalDateTime inicioReserva, List<Object> eventos) {
+                           LocalDateTime inicioReserva, Double latitud, Double longitud, List<Object> eventos) {
         this.id = id;
         this.comercioId = comercioId;
         this.modalidad = modalidad;
@@ -48,6 +50,8 @@ public class LoteExcedente {
         this.fotosUrl = fotosUrl;
         this.beneficiarioReservaId = beneficiarioReservaId;
         this.inicioReserva = inicioReserva;
+        this.latitud = latitud;
+        this.longitud = longitud;
         this.eventos = eventos;
     }
 
@@ -66,6 +70,8 @@ public class LoteExcedente {
                 fotosUrl,
                 null,
                 null,
+                null,
+                null,
                 new ArrayList<>()
         );
     }
@@ -74,9 +80,10 @@ public class LoteExcedente {
                                               double cantidadKg, Dinero precio, FechaCaducidad fechaCaducidad,
                                               LocalDateTime fechaPublicacion, String descripcion,
                                               List<String> fotosUrl, UUID beneficiarioReservaId,
-                                              LocalDateTime inicioReserva) {
+                                              LocalDateTime inicioReserva, Double latitud, Double longitud) {
         return new LoteExcedente(id, comercioId, modalidad, estado, cantidadKg, precio, fechaCaducidad,
-                fechaPublicacion, descripcion, fotosUrl, beneficiarioReservaId, inicioReserva, new ArrayList<>());
+                fechaPublicacion, descripcion, fotosUrl, beneficiarioReservaId, inicioReserva, latitud, longitud,
+                new ArrayList<>());
     }
 
     void registrarEvento(Object evento) {
@@ -176,6 +183,15 @@ public class LoteExcedente {
         estado = EstadoLote.RECHAZADO;
     }
 
+    public void asignarUbicacion(Double latitud, Double longitud) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+    }
+
+    boolean tieneUbicacion() {
+        return latitud != null && longitud != null;
+    }
+
     public boolean estaDisponible() {
         return estado == EstadoLote.DISPONIBLE && !fechaCaducidad.haExpirado();
     }
@@ -244,5 +260,13 @@ public class LoteExcedente {
 
     public LocalDateTime getInicioReserva() {
         return inicioReserva;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
     }
 }
