@@ -5,6 +5,7 @@ import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.port.input.ValidarPinUseCase;
 import com.foodlink.domain.port.output.IRepositorioLote;
 import com.foodlink.domain.port.output.IRepositorioPin;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,10 +15,15 @@ public class ValidarPinUseCaseImpl implements ValidarPinUseCase {
 
     private final IRepositorioPin repositorioPin;
     private final IRepositorioLote repositorioLote;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ValidarPinUseCaseImpl(IRepositorioPin repositorioPin, IRepositorioLote repositorioLote) {
+    public ValidarPinUseCaseImpl(
+            IRepositorioPin repositorioPin,
+            IRepositorioLote repositorioLote,
+            ApplicationEventPublisher eventPublisher) {
         this.repositorioPin = repositorioPin;
         this.repositorioLote = repositorioLote;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -37,5 +43,6 @@ public class ValidarPinUseCaseImpl implements ValidarPinUseCase {
 
         lote.confirmarEntrega(receptorId);
         repositorioLote.guardar(lote);
+        lote.pullEventos().forEach(eventPublisher::publishEvent);
     }
 }
