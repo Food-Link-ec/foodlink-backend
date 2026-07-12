@@ -63,4 +63,15 @@ public interface LoteJpaRepository extends JpaRepository<LoteJpaEntity, UUID> {
            "AND l.estado IN ('VENDIDO', 'ENTREGADO')",
            nativeQuery = true)
     Object[] estadisticasCompras(@Param("usuarioId") UUID usuarioId);
+
+    @Query("SELECT l FROM LoteJpaEntity l WHERE " +
+           "l.estado = 'DISPONIBLE' AND l.categoria = :categoria")
+    Page<LoteJpaEntity> findByCategoria(@Param("categoria") String categoria, Pageable pageable);
+
+    @Query("SELECT l FROM LoteJpaEntity l WHERE " +
+           "l.estado = 'DISPONIBLE' AND l.categoria = :categoria " +
+           "AND l.modalidad = :modalidad")
+    Page<LoteJpaEntity> findByCategoriaAndModalidad(@Param("categoria") String categoria,
+                                                      @Param("modalidad") String modalidad,
+                                                      Pageable pageable);
 }
