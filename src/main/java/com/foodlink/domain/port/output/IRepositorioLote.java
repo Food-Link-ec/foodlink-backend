@@ -23,4 +23,6 @@ public interface IRepositorioLote {
     List<LoteExcedente> buscarExpirados();
 
     List<LoteExcedente> buscarDisponiblesPorModalidad(Modalidad modalidad);
+
+    List<LoteExcedente> buscarDisponiblesCercanos(double latitud, double longitud, double radioKm);
 }
