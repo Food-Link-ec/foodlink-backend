@@ -4,6 +4,8 @@ import com.foodlink.application.dto.request.AnalizarImagenRequest;
 import com.foodlink.application.dto.response.AnalisisImagenResponse;
 import com.foodlink.application.dto.response.SugerenciaPublicacionResponse;
 import com.foodlink.domain.port.output.IServicioIA;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,6 +19,7 @@ import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/v1/ia")
+@Tag(name = "Inteligencia Artificial", description = "OCR y clasificación automática de productos")
 public class IaController {
 
     private final IServicioIA servicioIA;
@@ -25,6 +28,7 @@ public class IaController {
         this.servicioIA = servicioIA;
     }
 
+    @Operation(summary = "Analizar imagen de etiqueta", description = "Tesseract primero, Gemini como fallback. Detecta fecha de caducidad.")
     @PostMapping("/analizar-imagen")
     public ResponseEntity<AnalisisImagenResponse> analizarImagen(@RequestParam MultipartFile imagen) throws IOException {
         String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
@@ -32,6 +36,7 @@ public class IaController {
         return ResponseEntity.ok(servicioIA.analizarImagen(request));
     }
 
+    @Operation(summary = "Sugerir datos para publicar lote", description = "Retorna fecha, categoría y descripción sugeridas basadas en la foto.")
     @PostMapping("/sugerir-publicacion")
     public ResponseEntity<SugerenciaPublicacionResponse> sugerirPublicacion(
             @RequestParam("imagen") MultipartFile imagen,
