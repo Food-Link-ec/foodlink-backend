@@ -53,4 +53,14 @@ public interface LoteJpaRepository extends JpaRepository<LoteJpaEntity, UUID> {
            "ORDER BY lotes DESC LIMIT 5",
            nativeQuery = true)
     List<Object[]> findTop5ComerciosPorImpacto();
+
+    @Query(value = "SELECT COUNT(l.id) as lotes_comprados, " +
+           "COALESCE(SUM(l.precio_monto), 0) as total_pagado, " +
+           "COALESCE(SUM(l.cantidad_kg), 0) as kg_comprados " +
+           "FROM lotes_excedentes l " +
+           "WHERE l.beneficiario_reserva_id = :usuarioId " +
+           "AND l.modalidad = 'VENTA' " +
+           "AND l.estado IN ('VENDIDO', 'ENTREGADO')",
+           nativeQuery = true)
+    Object[] estadisticasCompras(@Param("usuarioId") UUID usuarioId);
 }
