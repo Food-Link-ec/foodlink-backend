@@ -42,4 +42,15 @@ public interface LoteJpaRepository extends JpaRepository<LoteJpaEntity, UUID> {
 
     @Query("SELECT l FROM LoteJpaEntity l WHERE l.estado IN ('DISPONIBLE', 'RESERVADO') AND l.fechaCaducidad < :ahora")
     List<LoteJpaEntity> findLotesCaducados(@Param("ahora") LocalDateTime ahora);
+
+    @Query("SELECT COUNT(l) FROM LoteJpaEntity l WHERE l.estado = :estado")
+    Long countByEstado(@Param("estado") String estado);
+
+    @Query(value = "SELECT l.comercio_id, COUNT(i.id) as lotes, SUM(i.cantidad_kg) as kg " +
+           "FROM impacto_metricas i " +
+           "JOIN lotes_excedentes l ON i.lote_id = l.id " +
+           "GROUP BY l.comercio_id " +
+           "ORDER BY lotes DESC LIMIT 5",
+           nativeQuery = true)
+    List<Object[]> findTop5ComerciosPorImpacto();
 }

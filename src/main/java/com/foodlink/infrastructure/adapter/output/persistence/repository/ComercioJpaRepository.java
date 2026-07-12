@@ -17,4 +17,6 @@ public interface ComercioJpaRepository extends JpaRepository<ComercioJpaEntity, 
     boolean existsByRuc(String ruc);
 
     List<ComercioJpaEntity> findByEstado(EstadoComercio estado);
+
+    Long countByEstado(EstadoComercio estado);
 }

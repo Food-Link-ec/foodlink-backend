@@ -46,4 +46,9 @@ public interface ImpactoMetricaJpaRepository extends JpaRepository<ImpactoMetric
            "AND DATE_TRUNC('month', i.fecha_entrega) = DATE_TRUNC('month', CURRENT_DATE)",
            nativeQuery = true)
     Double sumCantidadKgMesActualByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT SUM(cantidad_kg) FROM impacto_metricas " +
+           "WHERE DATE_TRUNC('month', fecha_entrega) = DATE_TRUNC('month', CURRENT_DATE)",
+           nativeQuery = true)
+    Double sumCantidadKgMesActual();
 }
