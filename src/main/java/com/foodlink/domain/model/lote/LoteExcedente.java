@@ -192,6 +192,10 @@ public class LoteExcedente {
         return latitud != null && longitud != null;
     }
 
+    public void setInicioReservaParaTest(LocalDateTime inicioReserva) {
+        this.inicioReserva = inicioReserva;
+    }
+
     public boolean estaDisponible() {
         return estado == EstadoLote.DISPONIBLE && !fechaCaducidad.haExpirado();
     }
