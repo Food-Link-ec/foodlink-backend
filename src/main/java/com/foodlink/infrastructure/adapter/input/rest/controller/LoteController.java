@@ -59,9 +59,10 @@ public class LoteController {
             @RequestParam(required = false) UUID comercioId,
             @RequestParam(required = false) Double latitud,
             @RequestParam(required = false) Double longitud,
-            @RequestParam(required = false) Double radioKm) {
+            @RequestParam(required = false) Double radioKm,
+            @RequestParam(required = false) String categoria) {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                modalidad, estado, comercioId, latitud, longitud, radioKm, null, 0, 10);
+                modalidad, estado, comercioId, latitud, longitud, radioKm, null, categoria, 0, 10);
         return ResponseEntity.ok(buscarLotesUseCase.buscar(request));
     }
 
@@ -81,10 +82,11 @@ public class LoteController {
             @RequestParam(required = false) Double lng,
             @RequestParam(required = false) Double radioKm,
             @RequestParam(required = false) String q,
+            @RequestParam(required = false) String categoria,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         BuscarLotesRequest request = new BuscarLotesRequest(
-                modalidad, estado, comercioId, lat, lng, radioKm, q, page, size);
+                modalidad, estado, comercioId, lat, lng, radioKm, q, categoria, page, size);
         return ResponseEntity.ok(buscarLotesUseCase.buscarPaginado(request));
     }
 
