@@ -55,6 +55,8 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/comercios/mis-lotes").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/redistribucion/mis-reservas").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/ia/**").hasAnyRole("COMERCIO", "ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/valoraciones/mis-valoraciones").authenticated()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/valoraciones/comercio/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
