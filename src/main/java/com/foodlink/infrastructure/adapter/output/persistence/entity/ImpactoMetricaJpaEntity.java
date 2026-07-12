@@ -27,10 +27,10 @@ public class ImpactoMetricaJpaEntity {
     @Column(name = "lote_id", nullable = false)
     private UUID loteId;
 
-    @Column(name = "cantidad_kg", nullable = false)
+    @Column(name = "cantidad_kg", nullable = false, columnDefinition = "numeric")
     private double cantidadKg;
 
-    @Column(name = "co2_evitado_kg", nullable = false)
+    @Column(name = "co2_evitado_kg", nullable = false, columnDefinition = "numeric")
     private double co2EvitadoKg;
 
     @Column(name = "personas_beneficiadas", nullable = false)
