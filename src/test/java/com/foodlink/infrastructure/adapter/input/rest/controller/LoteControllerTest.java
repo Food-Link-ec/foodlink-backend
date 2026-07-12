@@ -60,20 +60,20 @@ class LoteControllerTest {
     private String requestVentaJson() throws Exception {
         PublicarLoteRequest request = new PublicarLoteRequest("VENTA", 10.0, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), "Frutas y verduras frescas",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null);
         return objectMapper.writeValueAsString(request);
     }
 
     private LoteResponse loteResponseVenta(UUID id, UUID comercioId) {
         return new LoteResponse(id, comercioId, "VENTA", "DISPONIBLE", 10.0, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), LocalDateTime.now(),
-                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"));
+                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null);
     }
 
     private LoteResponse loteResponseDonacion(UUID id, UUID comercioId) {
         return new LoteResponse(id, comercioId, "DONACION", "DISPONIBLE", 10.0, null, null,
                 LocalDateTime.now().plusDays(3), LocalDateTime.now(), "Pan del día",
-                List.of("https://foto.com/1.jpg"));
+                List.of("https://foto.com/1.jpg"), null, null);
     }
 
     @Test
