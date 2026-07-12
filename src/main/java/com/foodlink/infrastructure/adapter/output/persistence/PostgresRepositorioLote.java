@@ -10,6 +10,7 @@ import com.foodlink.infrastructure.adapter.output.persistence.mapper.LoteMapper;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.LoteJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,6 +82,22 @@ public class PostgresRepositorioLote implements IRepositorioLote {
                                 latitud, longitud,
                                 entity.getLatitud(), entity.getLongitud(),
                                 radioKm))
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LoteExcedente> buscarReservasExpiradas(LocalDateTime limiteInicio) {
+        return jpaRepository.findReservasExpiradas(limiteInicio)
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LoteExcedente> buscarLotesCaducados() {
+        return jpaRepository.findLotesCaducados(LocalDateTime.now())
+                .stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
