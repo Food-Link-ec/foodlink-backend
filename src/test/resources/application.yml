@@ -17,3 +17,13 @@ spring:
     redis:
       host: localhost
       port: 6379
+  task:
+    scheduling:
+      enabled: false
+
+foodlink:
+  reserva:
+    timeout-minutos: 30
+  scheduler:
+    reservas-delay-ms: 999999999
+    lotes-delay-ms: 999999999
