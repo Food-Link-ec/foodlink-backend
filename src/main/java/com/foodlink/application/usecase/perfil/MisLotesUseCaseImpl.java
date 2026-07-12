@@ -22,9 +22,18 @@ public class MisLotesUseCaseImpl implements MisLotesUseCase {
     }
 
     @Override
-    public List<LoteResponse> obtenerMisLotes(UUID comercioId) {
-        return repositorioLote.buscarPorComercio(comercioId)
-                .stream().map(this::toResponse)
+    public List<LoteResponse> obtenerMisLotes(UUID comercioId, String estado) {
+        List<LoteExcedente> lotes;
+
+        if (estado != null && !estado.isBlank()) {
+            lotes = repositorioLote.buscarPorComercioYEstado(
+                    comercioId, EstadoLote.valueOf(estado.toUpperCase()));
+        } else {
+            lotes = repositorioLote.buscarPorComercio(comercioId);
+        }
+
+        return lotes.stream()
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 

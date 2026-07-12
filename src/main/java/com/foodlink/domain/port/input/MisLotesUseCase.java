@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface MisLotesUseCase {
 
-    List<LoteResponse> obtenerMisLotes(UUID comercioId);
+    List<LoteResponse> obtenerMisLotes(UUID comercioId, String estado);
 
     List<LoteResponse> obtenerMisReservas(UUID usuarioId);
 }
