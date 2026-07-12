@@ -26,7 +26,10 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
     public List<LoteResponse> buscar(BuscarLotesRequest request) {
         List<LoteExcedente> lotes;
 
-        if (request.comercioId() != null) {
+        if (request.latitud() != null && request.longitud() != null && request.radioKm() != null) {
+            lotes = repositorioLote.buscarDisponiblesCercanos(
+                    request.latitud(), request.longitud(), request.radioKm());
+        } else if (request.comercioId() != null) {
             lotes = repositorioLote.buscarPorComercio(request.comercioId());
         } else if (request.modalidad() != null) {
             Modalidad modalidad = Modalidad.valueOf(request.modalidad().toUpperCase());
@@ -63,7 +66,9 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
                 lote.getFechaCaducidad().getValor(),
                 lote.getFechaPublicacion(),
                 lote.getDescripcion(),
-                lote.getFotosUrl()
+                lote.getFotosUrl(),
+                lote.getLatitud(),
+                lote.getLongitud()
         );
     }
 }
