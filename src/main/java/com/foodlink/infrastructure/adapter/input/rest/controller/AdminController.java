@@ -1,9 +1,11 @@
 package com.foodlink.infrastructure.adapter.input.rest.controller;
 
+import com.foodlink.application.dto.response.AnalyticsDashboardResponse;
 import com.foodlink.application.dto.response.BeneficiarioResponse;
 import com.foodlink.application.dto.response.ComercioResponse;
 import com.foodlink.domain.port.input.AdministrarBeneficiarioUseCase;
 import com.foodlink.domain.port.input.AdministrarComercioUseCase;
+import com.foodlink.infrastructure.adapter.output.persistence.AnalyticsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,12 +22,20 @@ public class AdminController {
 
     private final AdministrarComercioUseCase administrarComercioUseCase;
     private final AdministrarBeneficiarioUseCase administrarBeneficiarioUseCase;
+    private final AnalyticsService analyticsService;
 
     public AdminController(
             AdministrarComercioUseCase administrarComercioUseCase,
-            AdministrarBeneficiarioUseCase administrarBeneficiarioUseCase) {
+            AdministrarBeneficiarioUseCase administrarBeneficiarioUseCase,
+            AnalyticsService analyticsService) {
         this.administrarComercioUseCase = administrarComercioUseCase;
         this.administrarBeneficiarioUseCase = administrarBeneficiarioUseCase;
+        this.analyticsService = analyticsService;
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<AnalyticsDashboardResponse> analytics() {
+        return ResponseEntity.ok(analyticsService.obtenerAnalytics());
     }
 
     @GetMapping("/comercios/pendientes")
