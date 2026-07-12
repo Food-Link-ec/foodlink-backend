@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -40,10 +41,13 @@ public class PerfilController {
                 miPerfilUseCase.obtenerMiPerfil(usuario.getUsuarioId(), usuario.getTipoUsuario()));
     }
 
-    @Operation(summary = "Ver mis lotes publicados")
+    @Operation(summary = "Ver mis lotes",
+            description = "Filtra por estado: DISPONIBLE, RESERVADO, ENTREGADO, EXPIRADO, etc. Sin filtro retorna todos.")
     @GetMapping("/comercios/mis-lotes")
-    public ResponseEntity<List<LoteResponse>> misLotes(@CurrentUser UsuarioAutenticado usuario) {
-        return ResponseEntity.ok(misLotesUseCase.obtenerMisLotes(usuario.getUsuarioId()));
+    public ResponseEntity<List<LoteResponse>> misLotes(
+            @CurrentUser UsuarioAutenticado usuario,
+            @RequestParam(required = false) String estado) {
+        return ResponseEntity.ok(misLotesUseCase.obtenerMisLotes(usuario.getUsuarioId(), estado));
     }
 
     @Operation(summary = "Ver mis reservas activas")
