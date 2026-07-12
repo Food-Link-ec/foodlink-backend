@@ -46,6 +46,13 @@ jwt:
   expiration-ms: ${JWT_EXPIRATION_MS:3600000}
   refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
 
+foodlink:
+  reserva:
+    timeout-minutos: ${RESERVA_TIMEOUT_MINUTOS:30}
+  scheduler:
+    reservas-delay-ms: ${SCHEDULER_RESERVAS_DELAY_MS:60000}
+    lotes-delay-ms: ${SCHEDULER_LOTES_DELAY_MS:300000}
+
 server:
   port: ${SERVER_PORT:8080}
   error:
