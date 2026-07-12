@@ -8,6 +8,13 @@ public record BuscarLotesRequest(
         UUID comercioId,
         Double latitud,
         Double longitud,
-        Double radioKm
+        Double radioKm,
+        String q,
+        int page,
+        int size
 ) {
+    public BuscarLotesRequest {
+        if (page < 0) page = 0;
+        if (size <= 0 || size > 50) size = 10;
+    }
 }
