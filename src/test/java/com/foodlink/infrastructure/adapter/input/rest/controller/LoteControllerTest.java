@@ -67,13 +67,13 @@ class LoteControllerTest {
     private LoteResponse loteResponseVenta(UUID id, UUID comercioId) {
         return new LoteResponse(id, comercioId, "VENTA", "DISPONIBLE", 10.0, new BigDecimal("30"),
                 new BigDecimal("100"), LocalDateTime.now().plusDays(3), LocalDateTime.now(),
-                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null);
+                "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null);
     }
 
     private LoteResponse loteResponseDonacion(UUID id, UUID comercioId) {
         return new LoteResponse(id, comercioId, "DONACION", "DISPONIBLE", 10.0, null, null,
                 LocalDateTime.now().plusDays(3), LocalDateTime.now(), "Pan del día",
-                List.of("https://foto.com/1.jpg"), null, null, null);
+                List.of("https://foto.com/1.jpg"), null, null, null, null);
     }
 
     @Test

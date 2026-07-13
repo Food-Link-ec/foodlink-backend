@@ -62,7 +62,8 @@ public class MisLotesUseCaseImpl implements MisLotesUseCase {
                 lote.getFotosUrl(),
                 lote.getLatitud(),
                 lote.getLongitud(),
-                lote.getCategoria()
+                lote.getCategoria(),
+                lote.getBeneficiarioReservaId()
         );
     }
 }
