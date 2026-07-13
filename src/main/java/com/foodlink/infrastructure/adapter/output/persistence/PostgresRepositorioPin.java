@@ -5,12 +5,18 @@ import com.foodlink.domain.port.output.IRepositorioPin;
 import com.foodlink.infrastructure.adapter.output.persistence.entity.PinRetiroJpaEntity;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.PinRetiroJpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+// deleteByLoteId es una derived query custom del repositorio: a diferencia de
+// los métodos heredados de SimpleJpaRepository, no queda envuelta en una
+// transacción por defecto y falla con TransactionRequiredException si se
+// invoca fuera de una (ver GenerarPinUseCaseImpl.generarPin al regenerar PIN).
 @Component
+@Transactional
 public class PostgresRepositorioPin implements IRepositorioPin {
 
     private final PinRetiroJpaRepository jpaRepository;

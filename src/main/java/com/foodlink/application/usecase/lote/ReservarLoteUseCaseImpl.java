@@ -66,7 +66,8 @@ public class ReservarLoteUseCaseImpl implements ReservarLoteUseCase {
                 lote.getFotosUrl(),
                 lote.getLatitud(),
                 lote.getLongitud(),
-                lote.getCategoria()
+                lote.getCategoria(),
+                lote.getBeneficiarioReservaId()
         );
     }
 }

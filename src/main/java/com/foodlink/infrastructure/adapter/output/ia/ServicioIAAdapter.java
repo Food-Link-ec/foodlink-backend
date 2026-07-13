@@ -33,8 +33,8 @@ public class ServicioIAAdapter implements IServicioIA {
                     resultadoTesseract.fecha(),
                     null,
                     null,
-                    "alta",
-                    "tesseract",
+                    "ALTA",
+                    "TESSERACT",
                     "Fecha detectada mediante OCR local"
             );
         }
@@ -46,8 +46,8 @@ public class ServicioIAAdapter implements IServicioIA {
                     resultadoGemini.fecha(),
                     resultadoGemini.categoria(),
                     resultadoGemini.descripcion(),
-                    resultadoGemini.confianza(),
-                    "gemini",
+                    resultadoGemini.confianza() != null ? resultadoGemini.confianza().toUpperCase() : "NO_DETECTADA",
+                    "GEMINI",
                     "Analisis generado mediante Gemini Vision"
             );
         }
@@ -56,8 +56,8 @@ public class ServicioIAAdapter implements IServicioIA {
                 null,
                 null,
                 null,
-                null,
-                "ninguna",
+                "NO_DETECTADA",
+                "NINGUNO",
                 "No fue posible analizar la imagen: " + resultadoGemini.error()
         );
     }

@@ -19,6 +19,7 @@ public record LoteResponse(
         List<String> fotosUrl,
         Double latitud,
         Double longitud,
-        String categoriaProducto
+        String categoriaProducto,
+        UUID beneficiarioReservaId
 ) {
 }

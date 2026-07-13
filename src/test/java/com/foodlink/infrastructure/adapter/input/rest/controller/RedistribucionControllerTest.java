@@ -56,7 +56,7 @@ class RedistribucionControllerTest {
     private LoteResponse loteResponse() {
         return new LoteResponse(UUID.randomUUID(), UUID.randomUUID(), "VENTA", "RESERVADO", 10.0,
                 new BigDecimal("30"), new BigDecimal("100"), LocalDateTime.now().plusDays(3),
-                LocalDateTime.now(), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null);
+                LocalDateTime.now(), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null);
     }
 
     @Test

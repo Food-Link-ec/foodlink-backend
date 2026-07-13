@@ -116,7 +116,8 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
                 lote.getFotosUrl(),
                 lote.getLatitud(),
                 lote.getLongitud(),
-                lote.getCategoria()
+                lote.getCategoria(),
+                lote.getBeneficiarioReservaId()
         );
     }
 }
