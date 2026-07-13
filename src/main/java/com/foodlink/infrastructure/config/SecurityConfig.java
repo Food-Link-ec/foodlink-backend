@@ -69,11 +69,7 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.List.of(
-            "http://localhost:5173", 
-            "http://127.0.0.1:5173", 
-            "https://foodlink-frontend-pmr5.onrender.com"
-        ));
+        configuration.setAllowedOriginPatterns(java.util.List.of("*"));
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(java.util.List.of("*"));
         configuration.setAllowCredentials(true);
