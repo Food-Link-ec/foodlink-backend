@@ -43,7 +43,7 @@ class ServicioIAAdapterTest {
         AnalisisImagenResponse respuesta = servicioIAAdapter.analizarImagen(requestValido());
 
         assertEquals("12/05/2026", respuesta.fechaDetectada());
-        assertEquals("tesseract", respuesta.fuenteOcr());
+        assertEquals("TESSERACT", respuesta.fuenteOcr());
         verify(geminiVisionAdapter, never()).analizarImagen(anyString(), anyString());
     }
 
@@ -55,7 +55,7 @@ class ServicioIAAdapterTest {
 
         AnalisisImagenResponse respuesta = servicioIAAdapter.analizarImagen(requestValido());
 
-        assertEquals("gemini", respuesta.fuenteOcr());
+        assertEquals("GEMINI", respuesta.fuenteOcr());
         assertEquals("01/06/2026", respuesta.fechaDetectada());
     }
 
@@ -68,7 +68,7 @@ class ServicioIAAdapterTest {
 
         AnalisisImagenResponse respuesta = servicioIAAdapter.analizarImagen(requestValido());
 
-        assertEquals("gemini", respuesta.fuenteOcr());
+        assertEquals("GEMINI", respuesta.fuenteOcr());
         assertEquals("Panaderia", respuesta.categoriaProducto());
     }
 
@@ -82,7 +82,7 @@ class ServicioIAAdapterTest {
 
         assertEquals("Frutas", respuesta.categoriaProducto());
         assertEquals("Manzanas rojas", respuesta.descripcionSugerida());
-        assertEquals("alta", respuesta.confianzaFecha());
+        assertEquals("ALTA", respuesta.confianzaFecha());
     }
 
     @Test
@@ -93,7 +93,7 @@ class ServicioIAAdapterTest {
 
         AnalisisImagenResponse respuesta = servicioIAAdapter.analizarImagen(requestValido());
 
-        assertEquals("ninguna", respuesta.fuenteOcr());
+        assertEquals("NINGUNO", respuesta.fuenteOcr());
         assertNotNull(respuesta.mensaje());
     }
 
@@ -127,7 +127,7 @@ class ServicioIAAdapterTest {
 
         AnalisisImagenResponse respuesta = servicioIAAdapter.analizarImagen(requestValido());
 
-        assertEquals("ninguna", respuesta.fuenteOcr());
+        assertEquals("NINGUNO", respuesta.fuenteOcr());
         assertEquals("No fue posible analizar la imagen: Gemini API key no configurada", respuesta.mensaje());
     }
 }
