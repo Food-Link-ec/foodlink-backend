@@ -41,7 +41,7 @@ public class LoteMapper {
         List<LoteFotoJpaEntity> fotos = lote.getFotosUrl().stream()
                 .map(url -> {
                     LoteFotoJpaEntity foto = new LoteFotoJpaEntity();
-                    foto.setLoteId(lote.getId());
+                    foto.setLote(entity);
                     foto.setUrl(url);
                     return foto;
                 }).collect(Collectors.toList());
