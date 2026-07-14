@@ -55,7 +55,7 @@ public class MisLotesUseCaseImpl implements MisLotesUseCase {
                 lote.getCantidadKg(),
                 lote.getModalidad() == Modalidad.VENTA && lote.getPrecio() != null
                         ? lote.getPrecio().getMonto() : null,
-                null,
+                lote.getPrecioOriginal(),
                 lote.getFechaCaducidad().getValor(),
                 lote.getFechaPublicacion(),
                 lote.getDescripcion(),

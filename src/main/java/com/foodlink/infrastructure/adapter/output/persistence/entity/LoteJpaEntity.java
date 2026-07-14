@@ -42,6 +42,9 @@ public class LoteJpaEntity {
     @Column(name = "precio_monto")
     private BigDecimal precioMonto;
 
+    @Column(name = "precio_original", columnDefinition = "numeric")
+    private BigDecimal precioOriginal;
+
     @Column(name = "precio_moneda", length = 3)
     private String precioMoneda;
 

@@ -11,6 +11,7 @@ import com.foodlink.domain.model.lote.exception.LoteNoDisponibleException;
 import com.foodlink.domain.model.shared.Dinero;
 import com.foodlink.domain.model.shared.FechaCaducidad;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class LoteExcedente {
     private EstadoLote estado;
     private final double cantidadKg;
     private final Dinero precio;
+    private final BigDecimal precioOriginal;
     private final FechaCaducidad fechaCaducidad;
     private LocalDateTime fechaPublicacion;
     private final String descripcion;
@@ -36,16 +38,17 @@ public class LoteExcedente {
     private final List<Object> eventos;
 
     private LoteExcedente(UUID id, UUID comercioId, Modalidad modalidad, EstadoLote estado, double cantidadKg,
-                           Dinero precio, FechaCaducidad fechaCaducidad, LocalDateTime fechaPublicacion,
-                           String descripcion, List<String> fotosUrl, UUID beneficiarioReservaId,
-                           LocalDateTime inicioReserva, Double latitud, Double longitud, String categoria,
-                           List<Object> eventos) {
+                           Dinero precio, BigDecimal precioOriginal, FechaCaducidad fechaCaducidad,
+                           LocalDateTime fechaPublicacion, String descripcion, List<String> fotosUrl,
+                           UUID beneficiarioReservaId, LocalDateTime inicioReserva, Double latitud,
+                           Double longitud, String categoria, List<Object> eventos) {
         this.id = id;
         this.comercioId = comercioId;
         this.modalidad = modalidad;
         this.estado = estado;
         this.cantidadKg = cantidadKg;
         this.precio = precio;
+        this.precioOriginal = precioOriginal;
         this.fechaCaducidad = fechaCaducidad;
         this.fechaPublicacion = fechaPublicacion;
         this.descripcion = descripcion;
@@ -59,7 +62,8 @@ public class LoteExcedente {
     }
 
     static LoteExcedente crear(UUID comercioId, Modalidad modalidad, double cantidadKg, Dinero precio,
-                                FechaCaducidad fechaCaducidad, String descripcion, List<String> fotosUrl) {
+                                BigDecimal precioOriginal, FechaCaducidad fechaCaducidad, String descripcion,
+                                List<String> fotosUrl) {
         return new LoteExcedente(
                 UUID.randomUUID(),
                 comercioId,
@@ -67,6 +71,7 @@ public class LoteExcedente {
                 EstadoLote.BORRADOR,
                 cantidadKg,
                 precio,
+                precioOriginal,
                 fechaCaducidad,
                 null,
                 descripcion,
@@ -81,14 +86,14 @@ public class LoteExcedente {
     }
 
     public static LoteExcedente reconstituir(UUID id, UUID comercioId, Modalidad modalidad, EstadoLote estado,
-                                              double cantidadKg, Dinero precio, FechaCaducidad fechaCaducidad,
-                                              LocalDateTime fechaPublicacion, String descripcion,
-                                              List<String> fotosUrl, UUID beneficiarioReservaId,
+                                              double cantidadKg, Dinero precio, BigDecimal precioOriginal,
+                                              FechaCaducidad fechaCaducidad, LocalDateTime fechaPublicacion,
+                                              String descripcion, List<String> fotosUrl, UUID beneficiarioReservaId,
                                               LocalDateTime inicioReserva, Double latitud, Double longitud,
                                               String categoria) {
-        return new LoteExcedente(id, comercioId, modalidad, estado, cantidadKg, precio, fechaCaducidad,
-                fechaPublicacion, descripcion, fotosUrl, beneficiarioReservaId, inicioReserva, latitud, longitud,
-                categoria, new ArrayList<>());
+        return new LoteExcedente(id, comercioId, modalidad, estado, cantidadKg, precio, precioOriginal,
+                fechaCaducidad, fechaPublicacion, descripcion, fotosUrl, beneficiarioReservaId, inicioReserva,
+                latitud, longitud, categoria, new ArrayList<>());
     }
 
     void registrarEvento(Object evento) {
@@ -249,6 +254,10 @@ public class LoteExcedente {
 
     public Dinero getPrecio() {
         return precio;
+    }
+
+    public BigDecimal getPrecioOriginal() {
+        return precioOriginal;
     }
 
     public FechaCaducidad getFechaCaducidad() {

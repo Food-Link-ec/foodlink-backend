@@ -27,6 +27,7 @@ public class LoteMapper {
             entity.setPrecioMonto(lote.getPrecio().getMonto());
             entity.setPrecioMoneda(lote.getPrecio().getMoneda());
         }
+        entity.setPrecioOriginal(lote.getPrecioOriginal());
         entity.setFechaCaducidad(lote.getFechaCaducidad().getValor());
         entity.setFechaPublicacion(lote.getFechaPublicacion());
         entity.setDescripcion(lote.getDescripcion());
@@ -66,6 +67,7 @@ public class LoteMapper {
                 EstadoLote.valueOf(entity.getEstado()),
                 entity.getCantidadKg(),
                 precio,
+                entity.getPrecioOriginal(),
                 FechaCaducidad.reconstituir(entity.getFechaCaducidad()),
                 entity.getFechaPublicacion(),
                 entity.getDescripcion(),

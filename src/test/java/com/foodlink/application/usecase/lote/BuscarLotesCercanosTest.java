@@ -43,7 +43,7 @@ class BuscarLotesCercanosTest {
 
     private LoteExcedente loteConUbicacion(Double latitud, Double longitud) {
         LoteExcedente lote = LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, Modalidad.VENTA,
-                EstadoLote.DISPONIBLE, 10, Dinero.de(new BigDecimal("30"), "USD"),
+                EstadoLote.DISPONIBLE, 10, Dinero.de(new BigDecimal("30"), "USD"), null,
                 FechaCaducidad.de(LocalDateTime.now().plusDays(3)), LocalDateTime.now(),
                 "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null, null, null, null);
         lote.asignarUbicacion(latitud, longitud);

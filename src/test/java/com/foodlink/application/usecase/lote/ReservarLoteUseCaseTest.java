@@ -49,7 +49,7 @@ class ReservarLoteUseCaseTest {
 
     private LoteExcedente loteEnEstado(UUID id, EstadoLote estado) {
         return LoteExcedente.reconstituir(id, UUID.randomUUID(), Modalidad.VENTA, estado, 10,
-                Dinero.de(new BigDecimal("30"), "USD"), FechaCaducidad.de(LocalDateTime.now().plusDays(3)),
+                Dinero.de(new BigDecimal("30"), "USD"), null, FechaCaducidad.de(LocalDateTime.now().plusDays(3)),
                 LocalDateTime.now(), "Frutas y verduras frescas", List.of("https://foto.com/1.jpg"), null, null,
                 null, null, null);
     }

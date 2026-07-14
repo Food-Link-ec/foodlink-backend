@@ -19,7 +19,7 @@ public final class FabricaLote {
         validarCantidad(cantidadKg);
         precio.validarPrecioVenta(precioMercado);
         LoteExcedente lote = LoteExcedente.crear(comercioId, Modalidad.VENTA, cantidadKg, precio,
-                fechaCaducidad, descripcion, fotosUrl);
+                precioMercado.getMonto(), fechaCaducidad, descripcion, fotosUrl);
         lote.registrarEvento(new LoteRegistrado(lote.getId(), comercioId, Modalidad.VENTA, LocalDateTime.now()));
         return lote;
     }
@@ -30,7 +30,7 @@ public final class FabricaLote {
         validarCantidad(cantidadKg);
         Dinero precio = Dinero.cero();
         LoteExcedente lote = LoteExcedente.crear(comercioId, Modalidad.DONACION, cantidadKg, precio,
-                fechaCaducidad, descripcion, fotosUrl);
+                null, fechaCaducidad, descripcion, fotosUrl);
         lote.registrarEvento(new LoteRegistrado(lote.getId(), comercioId, Modalidad.DONACION, LocalDateTime.now()));
         return lote;
     }
@@ -41,7 +41,7 @@ public final class FabricaLote {
         validarCantidad(cantidadKg);
         Dinero precio = Dinero.cero();
         LoteExcedente lote = LoteExcedente.crear(comercioId, Modalidad.RETIRO_DIRECTO, cantidadKg, precio,
-                fechaCaducidad, descripcion, fotosUrl);
+                null, fechaCaducidad, descripcion, fotosUrl);
         lote.registrarEvento(new LoteRegistrado(lote.getId(), comercioId, Modalidad.RETIRO_DIRECTO, LocalDateTime.now()));
         return lote;
     }

@@ -44,7 +44,7 @@ class BuscarLotesPaginadoTest {
 
     private LoteExcedente loteVenta() {
         return LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, Modalidad.VENTA, EstadoLote.DISPONIBLE,
-                10, Dinero.de(new BigDecimal("30"), "USD"), FechaCaducidad.de(LocalDateTime.now().plusDays(3)),
+                10, Dinero.de(new BigDecimal("30"), "USD"), null, FechaCaducidad.de(LocalDateTime.now().plusDays(3)),
                 LocalDateTime.now(), "Pan integral del dia", List.of("https://foto.com/1.jpg"),
                 null, null, null, null, null);
     }
