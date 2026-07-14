@@ -39,7 +39,7 @@ class LoteExcedenteTest {
 
     private LoteExcedente loteEnEstado(EstadoLote estado, Modalidad modalidad) {
         return LoteExcedente.reconstituir(UUID.randomUUID(), COMERCIO_ID, modalidad, estado, 10,
-                Dinero.de(new BigDecimal("30"), "USD"), fechaCaducidadValida(), null,
+                Dinero.de(new BigDecimal("30"), "USD"), null, fechaCaducidadValida(), null,
                 "Descripción válida", List.of("https://foto.com/1.jpg"), null, null, null, null, null);
     }
 

@@ -12,7 +12,6 @@ import com.foodlink.domain.port.output.IRepositorioLote;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
@@ -66,10 +65,10 @@ public class PublicarLoteUseCaseImpl implements PublicarLoteUseCase {
         }
         LoteExcedente guardado = repositorioLote.guardar(lote);
         lote.pullEventos().forEach(eventPublisher::publishEvent);
-        return toResponse(guardado, request.precioMercado());
+        return toResponse(guardado);
     }
 
-    private LoteResponse toResponse(LoteExcedente lote, BigDecimal precioMercado) {
+    private LoteResponse toResponse(LoteExcedente lote) {
         return new LoteResponse(
                 lote.getId(),
                 lote.getComercioId(),
@@ -77,7 +76,7 @@ public class PublicarLoteUseCaseImpl implements PublicarLoteUseCase {
                 lote.getEstado().name(),
                 lote.getCantidadKg(),
                 lote.getModalidad() == Modalidad.VENTA ? lote.getPrecio().getMonto() : null,
-                precioMercado,
+                lote.getPrecioOriginal(),
                 lote.getFechaCaducidad().getValor(),
                 lote.getFechaPublicacion(),
                 lote.getDescripcion(),
