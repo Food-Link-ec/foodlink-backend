@@ -74,4 +74,61 @@ public interface LoteJpaRepository extends JpaRepository<LoteJpaEntity, UUID> {
     Page<LoteJpaEntity> findByCategoriaAndModalidad(@Param("categoria") String categoria,
                                                       @Param("modalidad") String modalidad,
                                                       Pageable pageable);
+
+    @Query(value = "SELECT COALESCE(SUM(l.precio_monto), 0) FROM lotes_excedentes l " +
+           "WHERE l.beneficiario_reserva_id = :usuarioId " +
+           "AND l.modalidad = 'VENTA' " +
+           "AND l.estado IN ('VENDIDO', 'ENTREGADO') " +
+           "AND DATE_TRUNC('month', l.actualizado_en) = DATE_TRUNC('month', CURRENT_DATE - CAST(:mesesAtras || ' months' AS interval))",
+           nativeQuery = true)
+    Double sumPagadoMes(@Param("usuarioId") UUID usuarioId, @Param("mesesAtras") int mesesAtras);
+
+    @Query(value = "SELECT COALESCE(SUM(l.precio_monto), 0) FROM lotes_excedentes l " +
+           "WHERE l.comercio_id = :comercioId " +
+           "AND l.modalidad = 'VENTA' " +
+           "AND l.estado IN ('VENDIDO', 'ENTREGADO') " +
+           "AND DATE_TRUNC('month', l.actualizado_en) = DATE_TRUNC('month', CURRENT_DATE)",
+           nativeQuery = true)
+    Double sumIngresosMesActualByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT COALESCE(SUM(l.precio_monto), 0) FROM lotes_excedentes l " +
+           "WHERE l.comercio_id = :comercioId " +
+           "AND l.modalidad = 'VENTA' " +
+           "AND l.estado IN ('VENDIDO', 'ENTREGADO') " +
+           "AND DATE_TRUNC('month', l.actualizado_en) = DATE_TRUNC('month', CURRENT_DATE - CAST('1 month' AS interval))",
+           nativeQuery = true)
+    Double sumIngresosMesAnteriorByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT COUNT(l.id) FROM lotes_excedentes l " +
+           "WHERE l.comercio_id = :comercioId AND l.estado = 'RESERVADO'",
+           nativeQuery = true)
+    Long countReservasPendientesByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT l.id, l.descripcion, l.cantidad_kg, l.actualizado_en, l.estado, " +
+           "(SELECT lf.url FROM lote_fotos lf WHERE lf.lote_id = l.id LIMIT 1) as foto_url " +
+           "FROM lotes_excedentes l " +
+           "WHERE l.comercio_id = :comercioId " +
+           "ORDER BY l.actualizado_en DESC LIMIT 4",
+           nativeQuery = true)
+    List<Object[]> findLotesRecientesByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT l.id, l.descripcion, l.cantidad_kg, l.fecha_caducidad, " +
+           "COALESCE(b.nombre, 'Organización') as org_nombre " +
+           "FROM lotes_excedentes l " +
+           "LEFT JOIN beneficiarios b ON b.id = l.beneficiario_reserva_id " +
+           "WHERE l.comercio_id = :comercioId " +
+           "AND l.modalidad = 'DONACION' " +
+           "AND l.estado = 'RESERVADO' " +
+           "ORDER BY l.fecha_caducidad ASC LIMIT 3",
+           nativeQuery = true)
+    List<Object[]> findReservasUrgentesDonacionByComercio(@Param("comercioId") UUID comercioId);
+
+    @Query(value = "SELECT COUNT(l.id) FROM lotes_excedentes l " +
+           "WHERE l.comercio_id = :comercioId " +
+           "AND l.estado IN ('DISPONIBLE', 'RESERVADO') " +
+           "AND l.fecha_caducidad > NOW()",
+           nativeQuery = true)
+    Long countLotesActivosByComercio(@Param("comercioId") UUID comercioId);
+
+    List<LoteJpaEntity> findByBeneficiarioReservaId(UUID beneficiarioReservaId);
 }

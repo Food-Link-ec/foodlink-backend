@@ -35,4 +35,6 @@ public interface IRepositorioLote {
     Page<LoteExcedente> buscarPaginado(BuscarLotesRequest request);
 
     List<LoteExcedente> buscarPorComercioYEstado(UUID comercioId, EstadoLote estado);
+
+    List<LoteExcedente> buscarTodosPorBeneficiario(UUID beneficiarioId);
 }

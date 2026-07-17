@@ -1,6 +1,7 @@
 package com.foodlink.infrastructure.adapter.output.persistence;
 
 import com.foodlink.application.dto.response.EstadisticasCompradorResponse;
+import com.foodlink.infrastructure.adapter.output.persistence.repository.ImpactoMetricaJpaRepository;
 import com.foodlink.infrastructure.adapter.output.persistence.repository.LoteJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +20,11 @@ class CompradorStatsServiceTest {
     @Mock
     private LoteJpaRepository loteJpaRepository;
 
+    @Mock
+    private ImpactoMetricaJpaRepository impactoMetricaJpaRepository;
+
     private CompradorStatsService construirServicio() {
-        return new CompradorStatsService(loteJpaRepository);
+        return new CompradorStatsService(loteJpaRepository, impactoMetricaJpaRepository);
     }
 
     @Test

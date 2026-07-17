@@ -103,34 +103,23 @@ class MisLotesUseCaseTest {
     }
 
     @Test
-    void obtenerMisReservasDeberiaFiltrarSoloLotesReservadosDelUsuario() {
+    void obtenerMisReservasDeberiaLlamarBuscarTodosPorBeneficiarioConElUsuarioIdCorrecto() {
         UUID usuarioId = UUID.randomUUID();
         LoteExcedente loteDelUsuario = loteEnEstado(UUID.randomUUID(), EstadoLote.RESERVADO, usuarioId);
-        LoteExcedente loteDeOtroUsuario = loteEnEstado(UUID.randomUUID(), EstadoLote.RESERVADO, UUID.randomUUID());
-        when(repositorioLote.buscarPorEstado(EstadoLote.RESERVADO))
-                .thenReturn(List.of(loteDelUsuario, loteDeOtroUsuario));
+        when(repositorioLote.buscarTodosPorBeneficiario(usuarioId))
+                .thenReturn(List.of(loteDelUsuario));
 
         List<LoteResponse> resultado = useCase.obtenerMisReservas(usuarioId);
 
         assertEquals(1, resultado.size());
         assertEquals(loteDelUsuario.getId(), resultado.get(0).id());
-    }
-
-    @Test
-    void obtenerMisReservasNoDeberiaIncluirLotesReservadosPorOtroUsuario() {
-        UUID usuarioId = UUID.randomUUID();
-        LoteExcedente loteDeOtroUsuario = loteEnEstado(UUID.randomUUID(), EstadoLote.RESERVADO, UUID.randomUUID());
-        when(repositorioLote.buscarPorEstado(EstadoLote.RESERVADO)).thenReturn(List.of(loteDeOtroUsuario));
-
-        List<LoteResponse> resultado = useCase.obtenerMisReservas(usuarioId);
-
-        assertTrue(resultado.isEmpty());
+        verify(repositorioLote, times(1)).buscarTodosPorBeneficiario(usuarioId);
     }
 
     @Test
     void obtenerMisReservasDeberiaRetornarListaVaciaSiNoHayReservasActivas() {
         UUID usuarioId = UUID.randomUUID();
-        when(repositorioLote.buscarPorEstado(EstadoLote.RESERVADO)).thenReturn(List.of());
+        when(repositorioLote.buscarTodosPorBeneficiario(usuarioId)).thenReturn(List.of());
 
         List<LoteResponse> resultado = useCase.obtenerMisReservas(usuarioId);
 

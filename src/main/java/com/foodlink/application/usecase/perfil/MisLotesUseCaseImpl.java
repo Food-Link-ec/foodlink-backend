@@ -39,9 +39,8 @@ public class MisLotesUseCaseImpl implements MisLotesUseCase {
 
     @Override
     public List<LoteResponse> obtenerMisReservas(UUID usuarioId) {
-        return repositorioLote.buscarPorEstado(EstadoLote.RESERVADO)
+        return repositorioLote.buscarTodosPorBeneficiario(usuarioId)
                 .stream()
-                .filter(lote -> usuarioId.equals(lote.getBeneficiarioReservaId()))
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
