@@ -51,4 +51,10 @@ public interface ImpactoMetricaJpaRepository extends JpaRepository<ImpactoMetric
            "WHERE DATE_TRUNC('month', fecha_entrega) = DATE_TRUNC('month', CURRENT_DATE)",
            nativeQuery = true)
     Double sumCantidadKgMesActual();
+
+    @Query(value = "SELECT COALESCE(SUM(i.co2_evitado_kg), 0) FROM impacto_metricas i " +
+           "JOIN lotes_excedentes l ON i.lote_id = l.id " +
+           "WHERE l.beneficiario_reserva_id = :compradorId",
+           nativeQuery = true)
+    Double sumCo2ByComprador(@Param("compradorId") UUID compradorId);
 }
