@@ -1,5 +1,6 @@
 package com.foodlink.application.dto.response;
 
+import java.util.List;
 import java.util.UUID;
 
 public record EstadisticasCompradorResponse(
@@ -8,6 +9,9 @@ public record EstadisticasCompradorResponse(
         double totalPagado,
         double totalKgAdquiridos,
         double ahorroEstimado,
-        String mensajeAhorro
-) {
-}
+        String mensajeAhorro,
+        double co2EvitadoKg,
+        double kmSinConducir,
+        int arbolesEquivalentes,
+        List<Double> ahorroUltimos7Meses
+) {}
