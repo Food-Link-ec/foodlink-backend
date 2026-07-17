@@ -159,4 +159,12 @@ public class PostgresRepositorioLote implements IRepositorioLote {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<LoteExcedente> buscarTodosPorBeneficiario(UUID beneficiarioId) {
+        return jpaRepository.findByBeneficiarioReservaId(beneficiarioId)
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }
