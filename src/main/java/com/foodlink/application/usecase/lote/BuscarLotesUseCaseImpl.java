@@ -6,6 +6,7 @@ import com.foodlink.application.dto.response.PageResponse;
 import com.foodlink.domain.model.lote.EstadoLote;
 import com.foodlink.domain.model.lote.LoteExcedente;
 import com.foodlink.domain.model.lote.Modalidad;
+import com.foodlink.domain.model.shared.CalculadorDistancia;
 import com.foodlink.domain.port.input.BuscarLotesUseCase;
 import com.foodlink.domain.port.output.IRepositorioLote;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -67,8 +70,26 @@ public class BuscarLotesUseCaseImpl implements BuscarLotesUseCase {
     @Override
     public PageResponse<LoteResponse> buscarPaginado(BuscarLotesRequest request) {
         if (request.latitud() != null && request.longitud() != null && request.radioKm() != null) {
-            List<LoteExcedente> todos = repositorioLote.buscarDisponiblesCercanos(
-                    request.latitud(), request.longitud(), request.radioKm());
+            List<LoteExcedente> todos = new ArrayList<>(repositorioLote.buscarDisponiblesCercanos(
+                    request.latitud(), request.longitud(), request.radioKm()));
+
+            if (request.categoria() != null && !request.categoria().isBlank()) {
+                todos = todos.stream()
+                        .filter(l -> request.categoria().equalsIgnoreCase(l.getCategoria()))
+                        .collect(Collectors.toList());
+            }
+
+            if (request.q() != null && !request.q().isBlank()) {
+                String q = request.q().toLowerCase();
+                todos = todos.stream()
+                        .filter(l -> l.getDescripcion() != null && l.getDescripcion().toLowerCase().contains(q))
+                        .collect(Collectors.toList());
+            }
+
+            double lat = request.latitud();
+            double lng = request.longitud();
+            todos.sort(Comparator.comparingDouble(l ->
+                    CalculadorDistancia.calcularKm(lat, lng, l.getLatitud(), l.getLongitud())));
 
             int inicio = request.page() * request.size();
             int fin = Math.min(inicio + request.size(), todos.size());
