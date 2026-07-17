@@ -1,14 +1,12 @@
 package com.foodlink.infrastructure.adapter.output.ia;
 
 import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,8 +42,11 @@ public class TesseractOcrAdapter {
                 return TesseractResultado.exitoso(fecha, texto);
             }
             return TesseractResultado.sinFecha(texto);
-        } catch (IOException | TesseractException e) {
-            return TesseractResultado.fallido();
+        } catch (Throwable t) {
+            // Tesseract no disponible en este entorno (falta eng.traineddata o librería nativa).
+            // La librería nativa puede lanzar java.lang.Error (p.ej. Invalid memory access), que
+            // no es una Exception y por eso se captura Throwable. Se delega a Gemini como fallback.
+            return TesseractResultado.sinDisponibilidad();
         }
     }
 
@@ -72,6 +73,10 @@ public class TesseractOcrAdapter {
         }
 
         public static TesseractResultado fallido() {
+            return new TesseractResultado(false, null, null, false);
+        }
+
+        public static TesseractResultado sinDisponibilidad() {
             return new TesseractResultado(false, null, null, false);
         }
     }
